@@ -1,3 +1,7 @@
+package agents;
+
+import support.Cell;
+
 import java.util.ArrayList;
 
 /**
@@ -6,7 +10,7 @@ import java.util.ArrayList;
 public class BasicAgent {
 
     private ArrayList<Cell> unprobed = new ArrayList<>();
-    private ArrayList<Cell> probed = new ArrayList<>();;
+    private ArrayList<Cell> probed = new ArrayList<>();
     private char[][] agentBoard;
     private int numMines;
     private int boardSize;
@@ -17,7 +21,7 @@ public class BasicAgent {
         this.boardSize = agentBoard.length;
     }
 
-    //TODO implement part 1 sweep
+    //TODO implement part 1 sweep. For loop with win\loss check break.
     public void sweep() {
 
     }

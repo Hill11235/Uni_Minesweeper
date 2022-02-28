@@ -1,3 +1,5 @@
+import support.World;
+
 public class A2main {
 
     public static void main(String[] args) {

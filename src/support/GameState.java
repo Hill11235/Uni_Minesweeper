@@ -1,3 +1,7 @@
+package support;
+
+import support.Cell;
+
 import java.util.ArrayList;
 
 public class GameState {
