@@ -1,26 +1,28 @@
 package tests;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameStateTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void generateAgentBoard() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getCell() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void isWon() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void isLost() {
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getNumMines() {
     }
 }

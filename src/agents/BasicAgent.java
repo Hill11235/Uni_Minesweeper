@@ -1,6 +1,7 @@
 package agents;
 
 import support.Cell;
+import support.GameState;
 
 import java.util.ArrayList;
 
@@ -15,9 +16,9 @@ public class BasicAgent {
     private int numMines;
     private int boardSize;
 
-    public BasicAgent(char[][] agentBoard, int numMines) {
-        this.agentBoard = agentBoard;
-        this.numMines = numMines;
+    public BasicAgent(GameState game) {
+        this.agentBoard = game.generateAgentBoard();
+        this.numMines = game.getNumMines();
         this.boardSize = agentBoard.length;
     }
 
