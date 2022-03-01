@@ -1,5 +1,5 @@
-package support;
-
+import agents.BasicAgent;
+import support.GameState;
 import support.World;
 
 public class A2main {
@@ -24,7 +24,9 @@ public class A2main {
 
         switch (args[0]) {
         case "P1":
-            //TODO: Part 1
+            GameState game = new GameState(world);
+            BasicAgent agent = new BasicAgent(game);
+            agent.sweep(verbose);
         case "P2":
             //TODO: Part 2
         case "P3":

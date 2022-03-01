@@ -1,6 +1,5 @@
 package agents;
 
-import support.A2main;
 import support.Cell;
 import support.GameState;
 
@@ -124,6 +123,27 @@ public class BasicAgent {
      * Print board at end of the game.
      */
     private void printAgentBoard() {
-        A2main.printBoard(agentBoard);
+        System.out.println();
+        // first line
+        System.out.print("    ");
+        for (int j = 0; j < agentBoard[0].length; j++) {
+            System.out.print(j + " "); // x indexes
+        }
+        System.out.println();
+        // second line
+        System.out.print("    ");
+        for (int j = 0; j < agentBoard[0].length; j++) {
+            System.out.print("- ");// separator
+        }
+        System.out.println();
+        // the board
+        for (int i = 0; i < agentBoard.length; i++) {
+            System.out.print(" "+ i + "| ");// index+separator
+            for (int j = 0; j < agentBoard[0].length; j++) {
+                System.out.print(agentBoard[i][j] + " ");// value in the board
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }
