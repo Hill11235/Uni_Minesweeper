@@ -29,6 +29,7 @@ public class BasicAgent {
      */
     public void sweep() {
         boolean result = sweepLoop();
+        System.out.println("Final map\n");
         printFinalBoard();
         if (result) {
             System.out.println("\nResult: Agent alive: all solved\n");
@@ -44,11 +45,13 @@ public class BasicAgent {
     private boolean sweepLoop() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
-                probe(i, j);
                 if (game.isLost()) {
                     return false;
                 } else if (game.isWon()) {
                     return true;
+                }
+                if (agentBoard[i][j] != 'b') {
+                    probe(i, j);
                 }
             }
         }
@@ -82,7 +85,6 @@ public class BasicAgent {
      * Print board at end of the game.
      */
     private void printFinalBoard() {
-        System.out.println("Final map\n");
         A2main.printBoard(agentBoard);
     }
 }

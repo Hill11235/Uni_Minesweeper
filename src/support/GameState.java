@@ -74,7 +74,7 @@ public class GameState {
     }
 
     public boolean isWon() {
-        return probedCells.size() == (numCells - numMines);
+        return probedCells.size() == (numCells - numMines - blockedCells.size());
     }
 
     public boolean isLost() {

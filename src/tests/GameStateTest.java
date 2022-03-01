@@ -64,7 +64,9 @@ class GameStateTest {
         char[][] board = game.generateAgentBoard();
         for (int i = 0; i < board.length - 1; i++) {
             for (int j = 0; j < board.length; j++) {
-                game.getCell(i, j);
+                if (board[i][j] != 'b') {
+                    game.getCell(i, j);
+                }
             }
         }
         assertTrue(game.isWon());
