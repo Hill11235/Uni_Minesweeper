@@ -1,5 +1,6 @@
 package agents;
 
+import support.A2main;
 import support.Cell;
 import support.GameState;
 
@@ -10,27 +11,50 @@ import java.util.ArrayList;
  */
 public class BasicAgent {
 
+    private GameState game;
     private ArrayList<Cell> unprobed = new ArrayList<>();
     private ArrayList<Cell> probed = new ArrayList<>();
     private char[][] agentBoard;
     private int numMines;
-    private int boardSize;
 
     public BasicAgent(GameState game) {
+        this.game = game;
         this.agentBoard = game.generateAgentBoard();
         this.numMines = game.getNumMines();
-        this.boardSize = agentBoard.length;
     }
 
-    //TODO implement part 1 sweep. For loop with win\loss check break.
+
     public void sweep() {
-
+        boolean result = sweepLoop();
+        printFinalBoard();
+        if (result) {
+            System.out.println("\nResult: Agent alive: all solved\n");
+        } else {
+            System.out.println("\nResult: Agent dead: found mine\n");
+        }
     }
 
+    private boolean sweepLoop() {
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                probe(i, j);
+                if (game.isLost()) {
+                    return false;
+                } else if (game.isWon()) {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
 
-    //TODO implement cell probe and what the function should do in each return scenario
-    public void probe(int row, int col) {
-
+    private void probe(int row, int col) {
+        char probedCell = game.getCell(row, col);
+        probed.add(new Cell(row, col));
+        if (probedCell == 'm') {
+            probedCell = '-';
+        }
+        agentBoard[row][col] = probedCell;
     }
 
     /**
@@ -42,7 +66,7 @@ public class BasicAgent {
 
     }
 
-    public void printFinalBoard() {
-
+    private void printFinalBoard() {
+        A2main.printBoard(agentBoard);
     }
 }

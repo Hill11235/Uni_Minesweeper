@@ -1,3 +1,5 @@
+package support;
+
 import support.World;
 
 public class A2main {
