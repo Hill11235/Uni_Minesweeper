@@ -82,6 +82,7 @@ public class BasicAgent {
      * Print board at end of the game.
      */
     private void printFinalBoard() {
+        System.out.println("Final map\n");
         A2main.printBoard(agentBoard);
     }
 }
