@@ -1,5 +1,6 @@
 package support;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -9,16 +10,30 @@ public class Cell {
 
     private int row;
     private int col;
-    private boolean blocked = false;
-    private boolean flagged = false;
-    private int adjacentBombs;
 
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
+    public ArrayList<Cell> getAdjacentCells(int boardSize) {
+        ArrayList<Cell> cellList = new ArrayList<>();
+        int rowLowerBound = Math.max(0, row - 1);
+        int rowUpperBound = Math.min(boardSize, row + 2);
+        int colLowerBound = Math.max(0, col - 1);
+        int colUpperBound = Math.min(boardSize, col + 2);
 
+        for (int i = rowLowerBound; i < rowUpperBound; i++) {
+            for (int j = colLowerBound; j < colUpperBound; j++) {
+                Cell adjacentCell = new Cell(i, j);
+                cellList.add(adjacentCell);
+            }
+        }
+
+        cellList.remove(this);
+
+        return cellList;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -33,35 +48,15 @@ public class Cell {
         return Objects.hash(row, col);
     }
 
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
-
-    public boolean isFlagged() {
-        return flagged;
-    }
-
-    public void setFlagged(boolean flagged) {
-        this.flagged = flagged;
-    }
-
-    public int getAdjacentBombs() {
-        return adjacentBombs;
-    }
-
-    public void setAdjacentBombs(int adjacentBombs) {
-        this.adjacentBombs = adjacentBombs;
-    }
-
     public int getRow() {
         return this.row;
     }
 
     public int getCol() {
         return this.col;
+    }
+
+    public String toString() {
+        return "[" + this.row + "," + this.col + "]";
     }
 }
