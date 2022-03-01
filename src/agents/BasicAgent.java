@@ -43,33 +43,23 @@ public class BasicAgent {
      * @return boolean indicating result.
      */
     private boolean sweepLoop(boolean verbose) {
-        probeClues(verbose);
 
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
-                if (game.isLost()) {
-                    return false;
-                } else if (game.isWon()) {
-                    return true;
-                }
                 if (agentBoard[i][j] == '?') {
                     if (verbose) {
                         printAgentBoard();
                     }
                     probe(i, j);
                 }
+                if (game.isLost()) {
+                    return false;
+                } else if (game.isWon()) {
+                    return true;
+                }
             }
         }
         return true;
-    }
-
-    private void probeClues(boolean verbose) {
-        if (verbose) {
-            printAgentBoard();
-        }
-        int middleCoord = agentBoard.length/2;
-        probe(0,0);
-        probe(middleCoord, middleCoord);
     }
 
     /**

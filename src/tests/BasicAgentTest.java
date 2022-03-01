@@ -1,8 +1,6 @@
 package tests;
 
 import agents.BasicAgent;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import support.GameState;
@@ -19,6 +17,8 @@ class BasicAgentTest {
     private BasicAgent agent1;
     private GameState game2;
     private BasicAgent agent2;
+    private GameState game3;
+    private BasicAgent agent3;
 
     @BeforeEach
     public void setUp() {
@@ -26,12 +26,15 @@ class BasicAgentTest {
         game1 = new GameState(world1);
         agent1 = new BasicAgent(game1);
 
-        World world2 = World.TEST3;
+        World world2 = World.TEST2;
         game2 = new GameState(world2);
         agent2 = new BasicAgent(game2);
+
+        World world3 = World.TEST3;
+        game3 = new GameState(world3);
+        agent3 = new BasicAgent(game3);
     }
 
-    //Failing as win condition isn't being triggered
     @Test
     void testSweepTEST1() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -88,12 +91,73 @@ class BasicAgentTest {
     }
 
     @Test
-    void testSweepTEST3() {
+    void testSweepTEST2() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outContent));
 
         agent2.sweep(false);
+        String expectedOutput = "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 \n" +
+                "    - - - \n" +
+                " 0| 2 - ? \n" +
+                " 1| ? ? ? \n" +
+                " 2| b b ? \n" +
+                "\n" +
+                "\n" +
+                "Result: Agent dead: found mine\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    @Test
+    void testSweepTEST2Verbose() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent2.sweep(true);
+        String expectedOutput = "\n" +
+                "    0 1 2 \n" +
+                "    - - - \n" +
+                " 0| ? ? ? \n" +
+                " 1| ? ? ? \n" +
+                " 2| b b ? \n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 \n" +
+                "    - - - \n" +
+                " 0| 2 ? ? \n" +
+                " 1| ? ? ? \n" +
+                " 2| b b ? \n" +
+                "\n" +
+                "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 \n" +
+                "    - - - \n" +
+                " 0| 2 - ? \n" +
+                " 1| ? ? ? \n" +
+                " 2| b b ? \n" +
+                "\n" +
+                "\n" +
+                "Result: Agent dead: found mine" +
+                "\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    @Test
+    void testSweepTEST3() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent3.sweep(false);
         String expectedOutput = "Final map\n" +
                 "\n" +
                 "\n" +
@@ -117,7 +181,7 @@ class BasicAgentTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outContent));
 
-        agent2.sweep(true);
+        agent3.sweep(true);
         String expectedOutput = "\n" +
                 "    0 1 2 \n" +
                 "    - - - \n" +
