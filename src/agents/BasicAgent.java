@@ -24,6 +24,9 @@ public class BasicAgent {
     }
 
 
+    /**
+     * Sweeps through board using basic logic and prints result.
+     */
     public void sweep() {
         boolean result = sweepLoop();
         printFinalBoard();
@@ -34,6 +37,10 @@ public class BasicAgent {
         }
     }
 
+    /**
+     * Loops through all cells and returns true for victory and false for failure.
+     * @return boolean indicating result.
+     */
     private boolean sweepLoop() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -48,6 +55,11 @@ public class BasicAgent {
         return true;
     }
 
+    /**
+     * Probes a given cell using the provided coordinates
+     * @param row row coordinate.
+     * @param col column coordinate.
+     */
     private void probe(int row, int col) {
         char probedCell = game.getCell(row, col);
         probed.add(new Cell(row, col));
@@ -66,6 +78,9 @@ public class BasicAgent {
 
     }
 
+    /**
+     * Print board at end of the game.
+     */
     private void printFinalBoard() {
         A2main.printBoard(agentBoard);
     }
