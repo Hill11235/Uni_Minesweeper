@@ -58,16 +58,17 @@ public class GameState {
         return agentBoard;
     }
 
-    public char getCell(int row, int col) {
+    public char getCell(Cell cell) {
+        int row = cell.getRow();
+        int col = cell.getCol();
         char cellValue = gameBoard[row][col];
 
         if (cellValue == 'm') {
             this.lost = true;
         }
 
-        Cell probedCell = new Cell(row, col);
-        if (!probedCells.contains(probedCell)) {
-            probedCells.add(probedCell);
+        if (!probedCells.contains(cell)) {
+            probedCells.add(cell);
         }
 
         return cellValue;

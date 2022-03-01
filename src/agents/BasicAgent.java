@@ -27,10 +27,10 @@ public class BasicAgent {
     /**
      * Sweeps through board using basic logic and prints result.
      */
-    public void sweep() {
-        boolean result = sweepLoop();
+    public void sweep(boolean verbose) {
+        boolean result = sweepLoop(verbose);
         System.out.println("Final map\n");
-        printFinalBoard();
+        printAgentBoard();
         if (result) {
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
@@ -42,7 +42,9 @@ public class BasicAgent {
      * Loops through all cells and returns true for victory and false for failure.
      * @return boolean indicating result.
      */
-    private boolean sweepLoop() {
+    private boolean sweepLoop(boolean verbose) {
+        probeClues(verbose);
+
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
                 if (game.isLost()) {
@@ -50,12 +52,24 @@ public class BasicAgent {
                 } else if (game.isWon()) {
                     return true;
                 }
-                if (agentBoard[i][j] != 'b') {
+                if (agentBoard[i][j] == '?') {
                     probe(i, j);
+                    if (verbose) {
+                        printAgentBoard();
+                    }
                 }
             }
         }
         return true;
+    }
+
+    private void probeClues(boolean verbose) {
+        if (verbose) {
+            printAgentBoard();
+        }
+        int middleCoord = agentBoard.length/2;
+        probe(0,0);
+        probe(middleCoord, middleCoord);
     }
 
     /**
@@ -64,12 +78,16 @@ public class BasicAgent {
      * @param col column coordinate.
      */
     private void probe(int row, int col) {
-        char probedCell = game.getCell(row, col);
-        probed.add(new Cell(row, col));
-        if (probedCell == 'm') {
-            probedCell = '-';
+        Cell probedCell = new Cell(row, col);
+        char probedChar = game.getCell(probedCell);
+        probed.add(probedCell);
+
+        if (probedChar == 'm') {
+            probedChar = '-';
+        } else if (probedChar == '0') {
+            //TODO probe adjacent cells
         }
-        agentBoard[row][col] = probedCell;
+        agentBoard[row][col] = probedChar;
     }
 
     /**
@@ -84,7 +102,7 @@ public class BasicAgent {
     /**
      * Print board at end of the game.
      */
-    private void printFinalBoard() {
+    private void printAgentBoard() {
         A2main.printBoard(agentBoard);
     }
 }

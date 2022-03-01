@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import support.Cell;
 import support.GameState;
 import support.World;
 
@@ -42,7 +43,8 @@ class GameStateTest {
      */
     @Test
     void getZeroCell() {
-        char check = game.getCell(0, 0);
+        Cell safeCell = new Cell(0, 0);
+        char check = game.getCell(safeCell);
         assertEquals(check, '0');
     }
 
@@ -51,7 +53,8 @@ class GameStateTest {
      */
     @Test
     void getMineCell() {
-        char check = game.getCell(2, 0);
+        Cell mineCell = new Cell(2, 0);
+        char check = game.getCell(mineCell);
         assertEquals(check, 'm');
         assertTrue(game.isLost());
     }
@@ -65,7 +68,8 @@ class GameStateTest {
         for (int i = 0; i < board.length - 1; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j] != 'b') {
-                    game.getCell(i, j);
+                    Cell currentCell = new Cell(i, j);
+                    game.getCell(currentCell);
                 }
             }
         }

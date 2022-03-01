@@ -18,6 +18,8 @@ public class Cell {
         this.col = col;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,5 +55,13 @@ public class Cell {
 
     public void setAdjacentBombs(int adjacentBombs) {
         this.adjacentBombs = adjacentBombs;
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getCol() {
+        return this.col;
     }
 }
