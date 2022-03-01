@@ -9,8 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameStateTest {
 
-    GameState game;
+    private GameState game;
 
+    /**
+     * Initialise fresh game before each test.
+     */
     @BeforeEach
     public void setUp() {
         World world = World.TEST1;
@@ -31,19 +34,54 @@ class GameStateTest {
         }
     }
 
+    /**
+     * Get zero cell and check return.
+     */
     @Test
-    void getCell() {
+    void getZeroCell() {
+        char check = game.getCell(0, 0);
+        assertEquals(check, '0');
     }
 
+    /**
+     * Get a mine cell and then check that the game is lost.
+     */
+    @Test
+    void getMineCell() {
+        char check = game.getCell(2, 0);
+        assertEquals(check, 'm');
+        assertTrue(game.isLost());
+    }
+
+    /**
+     * Test get method on all non-mine cells and then check game is won.
+     */
+    @Test
+    void getAllNonMineCells() {
+        char check = game.getCell(2, 0);
+    }
+
+    /**
+     * Check at the beginning of the game that won is false.
+     */
     @Test
     void isWon() {
+        assertFalse(game.isWon());
     }
 
+    /**
+     * Check at the beginning of the game that lost is false.
+     */
     @Test
     void isLost() {
+        assertFalse(game.isLost());
     }
 
+    /**
+     * Check that the number of mines is correct.
+     */
     @Test
     void getNumMines() {
+        assertEquals(game.getNumMines(), 3);
     }
 }
