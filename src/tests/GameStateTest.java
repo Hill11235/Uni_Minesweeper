@@ -7,6 +7,9 @@ import support.World;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test that the logic in GameState behaves as anticipated.
+ */
 class GameStateTest {
 
     private GameState game;
@@ -58,7 +61,13 @@ class GameStateTest {
      */
     @Test
     void getAllNonMineCells() {
-        char check = game.getCell(2, 0);
+        char[][] board = game.generateAgentBoard();
+        for (int i = 0; i < board.length - 1; i++) {
+            for (int j = 0; j < board.length; j++) {
+                game.getCell(i, j);
+            }
+        }
+        assertTrue(game.isWon());
     }
 
     /**
