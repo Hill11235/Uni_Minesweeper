@@ -45,6 +45,7 @@ public class BeginnerAgentTest {
         agent1.sweep(false);
         String expectedOutput = "Final map\n" +
                 "\n" +
+                "\n" +
                 "    0 1 2 \n" +
                 "    - - - \n" +
                 " 0| 0 b b \n" +
@@ -68,6 +69,7 @@ public class BeginnerAgentTest {
         agent2.sweep(false);
         String expectedOutput = "Final map\n" +
                 "\n" +
+                "\n" +
                 "    0 1 2 \n" +
                 "    - - - \n" +
                 " 0| 2 * * \n" +
@@ -90,6 +92,7 @@ public class BeginnerAgentTest {
 
         agent3.sweep(false);
         String expectedOutput = "Final map\n" +
+                "\n" +
                 "\n" +
                 "    0 1 2 \n" +
                 "    - - - \n" +

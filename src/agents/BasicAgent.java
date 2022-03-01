@@ -10,10 +10,10 @@ import java.util.ArrayList;
  */
 public class BasicAgent {
 
-    private GameState game;
+    GameState game;
     private ArrayList<Cell> blockedCells = new ArrayList<>();
     private ArrayList<Cell> probedCells = new ArrayList<>();
-    private char[][] agentBoard;
+    char[][] agentBoard;
     private int numMines;
 
     public BasicAgent(GameState game) {
@@ -22,7 +22,6 @@ public class BasicAgent {
         this.numMines = game.getNumMines();
         initialiseBlockedList();
     }
-
 
     /**
      * Sweeps through board using basic logic and prints result.
@@ -68,7 +67,7 @@ public class BasicAgent {
      * @param col column coordinate.
      */
     //TODO refactor and simplify
-    private void probe(int row, int col) {
+    void probe(int row, int col) {
         Cell probedCell = new Cell(row, col);
 
         if (!probedCells.contains(probedCell) && !blockedCells.contains(probedCell)) {
@@ -94,9 +93,7 @@ public class BasicAgent {
      * @param row row coordinate.
      * @param col col coordinate.
      */
-    public void flag(int row, int col) {
-
-    }
+    public void flag(int row, int col) {}
 
     private void initialiseBlockedList() {
         for (int i = 0; i < agentBoard.length; i++) {
@@ -112,7 +109,8 @@ public class BasicAgent {
     /**
      * Print board at end of the game.
      */
-    private void printAgentBoard() {
+    //TODO test
+    public void printAgentBoard() {
         System.out.println();
         // first line
         System.out.print("    ");

@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public class GameState {
 
-    private char[][] gameBoard;
+    private final char[][] gameBoard;
     private int numMines;
-    private int numCells;
-    private ArrayList<Cell> blockedCells = new ArrayList<>();
-    private ArrayList<Cell> probedCells = new ArrayList<>();
+    private final int numCells;
+    private final ArrayList<Cell> blockedCells = new ArrayList<>();
+    private final ArrayList<Cell> probedCells = new ArrayList<>();
     private boolean lost;
 
     public GameState(World world) {
@@ -74,8 +74,6 @@ public class GameState {
     }
 
     public boolean isWon() {
-        //System.out.println("Probed size: " + probedCells.size());
-        //System.out.println("Win size: " + (numCells - numMines - blockedCells.size()));
         return probedCells.size() == (numCells - numMines - blockedCells.size());
     }
 
