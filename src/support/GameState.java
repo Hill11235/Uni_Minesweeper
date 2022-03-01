@@ -35,7 +35,6 @@ public class GameState {
             for (int j = 0; j < gameBoard[0].length; j++) {
                 if (gameBoard[i][j] == 'b') {
                     Cell blockedCell = new Cell(i, j);
-                    blockedCell.setBlocked(true);
                     blockedCells.add(blockedCell);
                 }
             }
@@ -75,6 +74,8 @@ public class GameState {
     }
 
     public boolean isWon() {
+        //System.out.println("Probed size: " + probedCells.size());
+        //System.out.println("Win size: " + (numCells - numMines - blockedCells.size()));
         return probedCells.size() == (numCells - numMines - blockedCells.size());
     }
 

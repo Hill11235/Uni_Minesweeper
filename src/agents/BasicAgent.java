@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class BasicAgent {
 
     private GameState game;
-    private ArrayList<Cell> unprobed = new ArrayList<>();
-    private ArrayList<Cell> probed = new ArrayList<>();
+    private ArrayList<Cell> blockedCells = new ArrayList<>();
+    private ArrayList<Cell> probedCells = new ArrayList<>();
     private char[][] agentBoard;
     private int numMines;
 
@@ -21,6 +21,7 @@ public class BasicAgent {
         this.game = game;
         this.agentBoard = game.generateAgentBoard();
         this.numMines = game.getNumMines();
+        initialiseBlockedList();
     }
 
 
@@ -53,10 +54,10 @@ public class BasicAgent {
                     return true;
                 }
                 if (agentBoard[i][j] == '?') {
-                    probe(i, j);
                     if (verbose) {
                         printAgentBoard();
                     }
+                    probe(i, j);
                 }
             }
         }
@@ -73,21 +74,30 @@ public class BasicAgent {
     }
 
     /**
-     * Probes a given cell using the provided coordinates
+     * Probes a given cell using the provided coordinates.
      * @param row row coordinate.
      * @param col column coordinate.
      */
+    //TODO refactor and simplify
     private void probe(int row, int col) {
         Cell probedCell = new Cell(row, col);
-        char probedChar = game.getCell(probedCell);
-        probed.add(probedCell);
 
-        if (probedChar == 'm') {
-            probedChar = '-';
-        } else if (probedChar == '0') {
-            //TODO probe adjacent cells
+        if (!probedCells.contains(probedCell) && !blockedCells.contains(probedCell)) {
+            char probedChar = game.getCell(probedCell);
+            probedCells.add(probedCell);
+
+            if (probedChar == 'm') {
+                probedChar = '-';
+            } else if (probedChar == '0') {
+                ArrayList<Cell> adjacentCells = probedCell.getAdjacentCells(agentBoard.length);
+                for (Cell c : adjacentCells) {
+                    if (!probedCells.contains(c)) {
+                        probe(c.getRow(), c.getCol());
+                    }
+                }
+            }
+            agentBoard[row][col] = probedChar;
         }
-        agentBoard[row][col] = probedChar;
     }
 
     /**
@@ -97,6 +107,17 @@ public class BasicAgent {
      */
     public void flag(int row, int col) {
 
+    }
+
+    private void initialiseBlockedList() {
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                if (agentBoard[i][j] == 'b') {
+                    Cell blockedCell = new Cell(i, j);
+                    blockedCells.add(blockedCell);
+                }
+            }
+        }
     }
 
     /**
