@@ -9,8 +9,8 @@ public class GameState {
     private char[][] gameBoard;
     private int numMines;
     private int numCells;
-    private ArrayList<Cell> blockedCells;
-    private ArrayList<Cell> probedCells;
+    private ArrayList<Cell> blockedCells = new ArrayList<>();
+    private ArrayList<Cell> probedCells = new ArrayList<>();
     private boolean lost;
 
     public GameState(World world) {
