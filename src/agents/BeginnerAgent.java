@@ -59,7 +59,7 @@ public class BeginnerAgent extends BasicAgent {
         return false;
     }
 
-    private boolean allFreeNeighbours(Cell centreCell) {
+    public boolean allFreeNeighbours(Cell centreCell) {
         ArrayList<Cell> adjacentCells = centreCell.getAdjacentCells(agentBoard.length);
         for (Cell neighbour : adjacentCells) {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
@@ -81,7 +81,7 @@ public class BeginnerAgent extends BasicAgent {
         return false;
     }
 
-    private boolean allMarkedNeighbours(Cell centreCell) {
+    public boolean allMarkedNeighbours(Cell centreCell) {
         ArrayList<Cell> adjacentCells = centreCell.getAdjacentCells(agentBoard.length);
         for (Cell neighbour : adjacentCells) {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
@@ -104,7 +104,7 @@ public class BeginnerAgent extends BasicAgent {
         return false;
     }
 
-    private int getNumApplicableNeighbours(Cell centreCell, char match) {
+    public int getNumApplicableNeighbours(Cell centreCell, char match) {
         ArrayList<Cell> adjacentCells = centreCell.getAdjacentCells(agentBoard.length);
         int numApplicableNeighbours = 0;
 

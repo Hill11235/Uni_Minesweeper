@@ -4,6 +4,7 @@ import agents.BasicAgent;
 import agents.BeginnerAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import support.Cell;
 import support.GameState;
 import support.World;
 
@@ -15,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BeginnerAgentTest {
 
     private GameState game1;
-    private BasicAgent agent1;
+    private BeginnerAgent agent1;
     private GameState game2;
-    private BasicAgent agent2;
+    private BeginnerAgent agent2;
     private GameState game3;
-    private BasicAgent agent3;
+    private BeginnerAgent agent3;
 
     @BeforeEach
     public void setUp() {
@@ -106,5 +107,37 @@ public class BeginnerAgentTest {
                 "\n";
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
+    }
+
+    /**
+     * Check instance of AFN which should return false.
+     */
+    @Test
+    public void testAllFreeNeighboursFailing() {
+        Cell centreCell = new Cell(1, 1);
+        assertFalse(agent1.allFreeNeighbours(centreCell));
+    }
+
+    //TODO check instance of AFN which should return true
+
+    /**
+     * Check instance of AMN which should return false.
+     */
+    @Test
+    public void testAllMarkedNeighboursFailing() {
+        Cell centreCell = new Cell(1, 1);
+        assertFalse(agent1.allMarkedNeighbours(centreCell));
+    }
+
+    //TODO check instance of AMN which should return true
+
+    /**
+     * Checks that the correct number of matched surrounding cells is returned correctly.
+     */
+    @Test
+    public void testGetApplicableNeighbours() {
+        Cell centreCell = new Cell(1, 1);
+        int blockedCells = agent1.getNumApplicableNeighbours(centreCell, 'b');
+        assertEquals(blockedCells, 4);
     }
 }
