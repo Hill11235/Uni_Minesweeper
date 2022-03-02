@@ -1,5 +1,12 @@
 package agents;
 
+import org.logicng.datastructures.Tristate;
+import org.logicng.formulas.Formula;
+import org.logicng.formulas.FormulaFactory;
+import org.logicng.io.parsers.ParserException;
+import org.logicng.io.parsers.PropositionalParser;
+import org.logicng.solvers.MiniSat;
+import org.logicng.solvers.SATSolver;
 import support.Cell;
 import support.GameState;
 
@@ -24,6 +31,7 @@ public class DNFAgent extends BeginnerAgent{
             printAgentBoard();
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
+            generateKB();
             boolean DnfResult = sweepLoop(verbose);
             System.out.println("Final map\n");
             printAgentBoard();
@@ -37,10 +45,17 @@ public class DNFAgent extends BeginnerAgent{
     }
 
     private void generateKB() {
-        //TODO loop through post SPS board and generate KB based on '?' positions.
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                Cell currentCell = new Cell(i, j);
+
+                if (agentBoard[i][j] == '?') {
+                    createSentence(currentCell);
+                }
+            }
+        }
     }
 
-    //TODO for each '?' position check entailments and update based on results.
     @Override
     boolean sweepLoop(boolean verbose) {
         for (int i = 0; i < agentBoard.length; i++) {
@@ -51,34 +66,56 @@ public class DNFAgent extends BeginnerAgent{
                     if (verbose) {
                         printAgentBoard();
                     }
-
+                    try {
+                        entailmentChecks(currentCell);
+                    } catch (ParserException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
-        if (game.isWon()) {
-            return true;
-        }
+        return game.isWon();
+    }
 
-        return false;
+    private void entailmentChecks(Cell currentCell) throws ParserException {
+        if (entailsNoDanger(currentCell)) {
+            probe(currentCell.getRow(), currentCell.getCol());
+        } else if (entailsDanger(currentCell)) {
+            flag(currentCell.getRow(), currentCell.getCol());
+        }
     }
 
     /**
      * Want to check KB entails ~D in cell, check SAT of KB & D, if false, probe.
      * @return boolean indicating satisifiability.
      */
-    //TODO implement
-    private boolean entailsNoDanger() {
-        return false;
+    private boolean entailsNoDanger(Cell coveredCell) throws ParserException {
+        FormulaFactory f = new FormulaFactory();
+        PropositionalParser p = new PropositionalParser(f);
+        String satInput = KB + " & D" + coveredCell.toString();
+        Formula formula = p.parse(satInput);
+
+        SATSolver miniSat = MiniSat.miniSat(f);
+        miniSat.add(formula);
+        Tristate result = miniSat.sat();
+        return Objects.equals(result.toString(), "TRUE");
     }
 
     /**
      * Want to check KB entails D in cell, check SAT of KB & ~D, if false, flag.
      * @return boolean indicating satisifiability.
      */
-    //TODO implement
-    private boolean entailsDanger() {
-        return false;
+    private boolean entailsDanger(Cell coveredCell) throws ParserException {
+        FormulaFactory f = new FormulaFactory();
+        PropositionalParser p = new PropositionalParser(f);
+        String satInput = KB + " & ~D" + coveredCell.toString();
+        Formula formula = p.parse(satInput);
+
+        SATSolver miniSat = MiniSat.miniSat(f);
+        miniSat.add(formula);
+        Tristate result = miniSat.sat();
+        return Objects.equals(result.toString(), "TRUE");
     }
 
     /**
@@ -97,7 +134,7 @@ public class DNFAgent extends BeginnerAgent{
      * For a given covered cell, generate logic sentences and add to the KB.
      * @param currentCell covered cell to generate logic based on.
      */
-    public void getSentence(Cell currentCell) {
+    public void createSentence(Cell currentCell) {
         ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
 
         for (Cell neighbour : adjacentCells) {
@@ -105,7 +142,8 @@ public class DNFAgent extends BeginnerAgent{
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
-                //create sentence and add to KB
+                String sentence = generateSentence(dangerSubsets, neighbour);
+                addToKB(sentence);
             }
         }
     }
@@ -117,13 +155,46 @@ public class DNFAgent extends BeginnerAgent{
      * @return logic sentence that's to be added to the KB.
      */
     private String generateSentence(List<Set<Integer>> dangerSubsets, Cell neighbour) {
-        String sentence = "";
-        //using cell, generate list of all covered cells
-        //for each subset:
-        //    parse and create an option
-        //    append each option to sentence
+        StringBuilder sentence = new StringBuilder("");
+        ArrayList<Cell> adjacentCovered = super.getApplicableNeighbours(neighbour, '?');
 
-        return sentence;
+        for (Set subset: dangerSubsets) {
+            String option = generateOption(subset, adjacentCovered);
+            if (sentence.length() > 0) {
+                sentence.append(" | ");
+            }
+            sentence.append(option);
+        }
+        if (sentence.length() != 0) {
+            sentence.append(")");
+            sentence.insert(0, "(");
+        }
+
+        return sentence.toString();
+    }
+
+    private String generateOption(Set<Integer> subset, ArrayList<Cell> adjacentCells) {
+        StringBuilder option = new StringBuilder("");
+        int numAdjacentCovered = adjacentCells.size();
+
+        for (int i = 0; i < numAdjacentCovered; i++) {
+
+            if (i > 0) {
+                option.append(" & ");
+            }
+            Cell currentCell = adjacentCells.get(i);
+            String clause = "D" + currentCell.toString();
+            if (!subset.contains(i)) {
+                clause = "~" + clause;
+            }
+            option.append(clause);
+        }
+        if (option.length() != 0) {
+            option.append(")");
+            option.insert(0, "(");
+        }
+
+        return option.toString();
     }
 
     /**
