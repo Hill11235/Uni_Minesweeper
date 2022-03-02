@@ -26,7 +26,7 @@ public class BeginnerAgent extends BasicAgent {
         }
     }
 
-    private boolean sweepLoop(boolean verbose) {
+    boolean sweepLoop(boolean verbose) {
         probeClues();
 
         for (int i = 0; i < agentBoard.length; i++) {
