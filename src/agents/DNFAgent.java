@@ -17,6 +17,7 @@ import java.util.*;
  */
 public class DNFAgent extends BeginnerAgent{
 
+    private ArrayList<Cell> addedToKB = new ArrayList<>();
     private String KB = "";
 
     public DNFAgent(GameState game) {
@@ -32,6 +33,7 @@ public class DNFAgent extends BeginnerAgent{
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
             generateKB();
+            System.out.println(KB);
             boolean DnfResult = sweepLoop(verbose);
             System.out.println("Final map\n");
             printAgentBoard();
@@ -140,10 +142,11 @@ public class DNFAgent extends BeginnerAgent{
         for (Cell neighbour : adjacentCells) {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
 
-            if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
+            if (cellValue != 'b' && cellValue != '?' && cellValue != '*' && !addedToKB.contains(neighbour)) {
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
                 String sentence = generateSentence(dangerSubsets, neighbour);
                 addToKB(sentence);
+                addedToKB.add(neighbour);
             }
         }
     }
