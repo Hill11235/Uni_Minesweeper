@@ -39,10 +39,6 @@ public class BeginnerAgent extends BasicAgent {
             for (int j = 0; j < agentBoard.length; j++) {
                 Cell currentCell = new Cell(i, j);
 
-                if (game.isWon()) {
-                    return true;
-                }
-
                 if (agentBoard[i][j] == '?') {
                     if (verbose) {
                         printAgentBoard();
@@ -56,6 +52,10 @@ public class BeginnerAgent extends BasicAgent {
             }
         }
 
+        if (game.isWon()) {
+            return true;
+        }
+
         return false;
     }
 
@@ -65,15 +65,10 @@ public class BeginnerAgent extends BasicAgent {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
-                ArrayList<Cell> adjacentInception = neighbour.getAdjacentCells(agentBoard.length);
                 int adjacentMines = Character.getNumericValue(cellValue);
-
-                for (Cell secondAdjacent : adjacentInception) {
-                    int numFlaggedNeighbours = getNumApplicableNeighbours(secondAdjacent, '*');
-
-                    if (adjacentMines == numFlaggedNeighbours) {
-                        return true;
-                    }
+                int numFlaggedNeighbours = getNumApplicableNeighbours(neighbour, '*');
+                if (adjacentMines == numFlaggedNeighbours) {
+                    return true;
                 }
             }
         }
@@ -87,16 +82,12 @@ public class BeginnerAgent extends BasicAgent {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
-                ArrayList<Cell> adjacentInception = neighbour.getAdjacentCells(agentBoard.length);
                 int adjacentMines = Character.getNumericValue(cellValue);
+                int numCoveredNeighbours = getNumApplicableNeighbours(neighbour, '?');
+                int numFlaggedNeighbours = getNumApplicableNeighbours(neighbour, '*');
 
-                for (Cell secondAdjacent : adjacentInception) {
-                    int numCoveredNeighbours = getNumApplicableNeighbours(secondAdjacent, '?');
-                    int numFlaggedNeighbours = getNumApplicableNeighbours(secondAdjacent, '*');
-
-                    if (numCoveredNeighbours == adjacentMines - numFlaggedNeighbours) {
-                        return true;
-                    }
+                if (numCoveredNeighbours == adjacentMines - numFlaggedNeighbours) {
+                    return true;
                 }
             }
         }

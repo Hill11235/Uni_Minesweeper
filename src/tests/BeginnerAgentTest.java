@@ -1,6 +1,5 @@
 package tests;
 
-import agents.BasicAgent;
 import agents.BeginnerAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -107,6 +106,11 @@ public class BeginnerAgentTest {
                 "\n";
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
+    }
+
+    @Test
+    public void runTest3Verbose() {
+        agent3.sweep(true);
     }
 
     /**
