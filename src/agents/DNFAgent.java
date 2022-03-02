@@ -93,6 +93,10 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
+    /**
+     * For a given covered cell, generate logic sentences and add to the KB.
+     * @param currentCell covered cell to generate logic based on.
+     */
     public void getSentence(Cell currentCell) {
         ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
 
@@ -101,15 +105,23 @@ public class DNFAgent extends BeginnerAgent{
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
-                //create individual options
-                //bring options together and add to KB
+                //create sentence and add to KB
             }
         }
     }
 
+    /**
+     * Given a cell, create all the logic options for danger in the surrounding cells.
+     * @param dangerSubsets the number of options containing cells to be marked as dangerous.
+     * @param neighbour numeric cell at centre of danger subsets.
+     * @return logic sentence that's to be added to the KB.
+     */
     private String generateSentence(List<Set<Integer>> dangerSubsets, Cell neighbour) {
         String sentence = "";
-
+        //using cell, generate list of all covered cells
+        //for each subset:
+        //    parse and create an option
+        //    append each option to sentence
 
         return sentence;
     }
