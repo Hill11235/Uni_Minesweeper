@@ -108,11 +108,6 @@ public class BeginnerAgentTest {
         System.setOut(originalOut);
     }
 
-    @Test
-    public void runTest3Verbose() {
-        agent3.sweep(true);
-    }
-
     /**
      * Check instance of AFN which should return false.
      */
@@ -122,8 +117,6 @@ public class BeginnerAgentTest {
         assertFalse(agent1.allFreeNeighbours(centreCell));
     }
 
-    //TODO check instance of AFN which should return true
-
     /**
      * Check instance of AMN which should return false.
      */
@@ -132,8 +125,6 @@ public class BeginnerAgentTest {
         Cell centreCell = new Cell(1, 1);
         assertFalse(agent1.allMarkedNeighbours(centreCell));
     }
-
-    //TODO check instance of AMN which should return true
 
     /**
      * Checks that the correct number of matched surrounding cells is returned correctly.

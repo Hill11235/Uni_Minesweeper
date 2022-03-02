@@ -27,12 +27,6 @@ public class BeginnerAgent extends BasicAgent {
     }
 
     private boolean sweepLoop(boolean verbose) {
-        //probe clue cells?
-        //scan all cells one by one
-        //check for win, if won then return true
-        //for each covered cell check adjacent cells
-        //if cell has all free neighbours then probe
-        //if cell has all marked neighbours then flag
         probeClues();
 
         for (int i = 0; i < agentBoard.length; i++) {

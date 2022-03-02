@@ -1,4 +1,5 @@
 import agents.BasicAgent;
+import agents.BeginnerAgent;
 import support.GameState;
 import support.World;
 
@@ -24,17 +25,24 @@ public class A2main {
 
         switch (args[0]) {
         case "P1":
-            GameState game = new GameState(world);
-            BasicAgent agent = new BasicAgent(game);
-            agent.sweep(verbose);
+            GameState game1 = new GameState(world);
+            BasicAgent basic = new BasicAgent(game1);
+            basic.sweep(verbose);
+            break;
         case "P2":
-            //TODO: Part 2
+            GameState game2 = new GameState(world);
+            BeginnerAgent beginner = new BeginnerAgent(game2);
+            beginner.sweep(verbose);
+            break;
         case "P3":
             //TODO: Part 3
+            break;
         case "P4":
             //TODO: Part 4
+            break;
         case "P5":
             //TODO: Part 5
+            break;
         }
 
         //templates to print results - copy to appropriate places
