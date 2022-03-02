@@ -17,7 +17,9 @@ import java.util.*;
  */
 public class DNFAgent extends BeginnerAgent{
 
-    private ArrayList<Cell> addedToKB = new ArrayList<>();
+    private final ArrayList<Cell> addedToKB = new ArrayList<>();
+    private final HashMap<Cell, Character> cellLetterMap = new HashMap<>();
+    int charIncrementer = 65;
     private String KB = "";
 
     public DNFAgent(GameState game) {
@@ -32,8 +34,8 @@ public class DNFAgent extends BeginnerAgent{
             printAgentBoard();
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
+            generateCellLetterMap();
             generateKB();
-            System.out.println(KB);
             boolean DnfResult = sweepLoop(verbose);
             System.out.println("Final map\n");
             printAgentBoard();
@@ -42,6 +44,19 @@ public class DNFAgent extends BeginnerAgent{
                 System.out.println("\nResult: Agent alive: all solved\n");
             } else {
                 System.out.println("\nResult: Agent not terminated\n");
+            }
+        }
+    }
+
+    private void generateCellLetterMap() {
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                Cell currentCell = new Cell(i, j);
+
+                if (agentBoard[i][j] == '?') {
+                    cellLetterMap.put(currentCell, (char) charIncrementer);
+                    charIncrementer++;
+                }
             }
         }
     }
@@ -95,7 +110,7 @@ public class DNFAgent extends BeginnerAgent{
     private boolean entailsNoDanger(Cell coveredCell) throws ParserException {
         FormulaFactory f = new FormulaFactory();
         PropositionalParser p = new PropositionalParser(f);
-        String satInput = KB + " & D" + coveredCell.toString();
+        String satInput = KB + " & " + cellLetterMap.get(coveredCell).toString();
         Formula formula = p.parse(satInput);
 
         SATSolver miniSat = MiniSat.miniSat(f);
@@ -111,7 +126,7 @@ public class DNFAgent extends BeginnerAgent{
     private boolean entailsDanger(Cell coveredCell) throws ParserException {
         FormulaFactory f = new FormulaFactory();
         PropositionalParser p = new PropositionalParser(f);
-        String satInput = KB + " & ~D" + coveredCell.toString();
+        String satInput = KB + " & ~" + cellLetterMap.get(coveredCell).toString();
         Formula formula = p.parse(satInput);
 
         SATSolver miniSat = MiniSat.miniSat(f);
@@ -123,7 +138,6 @@ public class DNFAgent extends BeginnerAgent{
     /**
      * Add a generated sentence to the KB.
      */
-    //TODO check this behaves
     private void addToKB(String sentence) {
         if (this.KB.equals("")) {
             this.KB = sentence;
@@ -186,7 +200,7 @@ public class DNFAgent extends BeginnerAgent{
                 option.append(" & ");
             }
             Cell currentCell = adjacentCells.get(i);
-            String clause = "D" + currentCell.toString();
+            String clause = cellLetterMap.get(currentCell).toString();
             if (!subset.contains(i)) {
                 clause = "~" + clause;
             }
