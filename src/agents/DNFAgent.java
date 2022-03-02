@@ -34,6 +34,7 @@ public class DNFAgent extends BeginnerAgent{
             printAgentBoard();
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
+            //System.out.println("Post SPS");
             generateCellLetterMap();
             generateKB();
             boolean DnfResult = sweepLoop(verbose);
@@ -48,6 +49,7 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
+    //TODO check this approach doesn't cause issues on the larger configs where there might be more covered cells than letters.
     private void generateCellLetterMap() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -96,9 +98,9 @@ public class DNFAgent extends BeginnerAgent{
     }
 
     private void entailmentChecks(Cell currentCell) throws ParserException {
-        if (entailsNoDanger(currentCell)) {
+        if (!entailsNoDanger(currentCell)) {
             probe(currentCell.getRow(), currentCell.getCol());
-        } else if (entailsDanger(currentCell)) {
+        } else if (!entailsDanger(currentCell)) {
             flag(currentCell.getRow(), currentCell.getCol());
         }
     }

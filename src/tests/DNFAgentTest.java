@@ -45,6 +45,11 @@ public class DNFAgentTest {
     }
 
     @Test
+    void TEST5() {
+        agent5.sweep(true);
+    }
+
+    @Test
     void testSweepTEST3() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;
