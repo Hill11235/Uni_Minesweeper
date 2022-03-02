@@ -12,6 +12,8 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO implement example from lectures which doesn't solve in one loop.
+
 public class BeginnerAgentTest {
 
     private GameState game1;
