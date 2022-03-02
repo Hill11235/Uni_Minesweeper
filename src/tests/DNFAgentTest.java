@@ -8,6 +8,9 @@ import support.World;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -135,5 +138,22 @@ public class DNFAgentTest {
                 "\n";
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
+    }
+
+    @Test
+    public void testGetKCombinations() {
+        ArrayList<Integer> masterSet = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            masterSet.add(i);
+        }
+
+        //test size correct
+        assertEquals(6, agent3.getKCombinations(masterSet, 2).size());
+        assertEquals(4, agent3.getKCombinations(masterSet, 1).size());
+
+        //test contents correct
+        String output4C2 = "[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]";
+        List<Set<Integer>> listCombo = agent3.getKCombinations(masterSet, 2);
+        assertEquals(output4C2, listCombo.toString());
     }
 }

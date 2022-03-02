@@ -46,11 +46,7 @@ public class BeginnerAgent extends BasicAgent {
             }
         }
 
-        if (game.isWon()) {
-            return true;
-        }
-
-        return false;
+        return game.isWon();
     }
 
     public boolean allFreeNeighbours(Cell centreCell) {
@@ -99,6 +95,20 @@ public class BeginnerAgent extends BasicAgent {
             }
         }
         return numApplicableNeighbours;
+    }
+
+    //TODO add test
+    public ArrayList<Cell> getApplicableNeighbours(Cell centreCell, char match) {
+        ArrayList<Cell> adjacentCells = centreCell.getAdjacentCells(agentBoard.length);
+        ArrayList<Cell> applicableNeighbours = new ArrayList<>();
+
+        for (Cell neighbour: adjacentCells) {
+            if (agentBoard[neighbour.getRow()][neighbour.getCol()] == match) {
+                applicableNeighbours.add(neighbour);
+            }
+        }
+
+        return applicableNeighbours;
     }
 
     private void probeClues() {
