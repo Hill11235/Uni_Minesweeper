@@ -1,6 +1,7 @@
 package agents;
 
 import support.GameState;
+import org.logicng.formulas.FormulaFactory;
 
 /**
  * P3 class for using a SAT solver to solve problem using KB in DNF.
@@ -18,7 +19,6 @@ public class DNFAgent extends BeginnerAgent{
     //run SPS from BeginnerAgent, if true then done
     //if false, then run SAT solver on resulting board
 
-    //TODO consider ultimate scenarios with SAT solver. Can this fail?
     @Override
     public void sweep(boolean verbose) {
         boolean SpsResult = super.sweepLoop(verbose);
@@ -28,12 +28,13 @@ public class DNFAgent extends BeginnerAgent{
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
             boolean DnfResult = sweepLoop(verbose);
+            System.out.println("Final map\n");
+            printAgentBoard();
+
             if (DnfResult) {
-                System.out.println("Final map\n");
-                printAgentBoard();
                 System.out.println("\nResult: Agent alive: all solved\n");
             } else {
-                //TODO complete this scenario
+                System.out.println("\nResult: Agent not terminated\n");
             }
         }
     }
