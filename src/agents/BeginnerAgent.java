@@ -14,6 +14,7 @@ public class BeginnerAgent extends BasicAgent {
         super(game);
     }
 
+    @Override
     public void sweep(boolean verbose) {
         boolean result = sps(verbose);
         System.out.println("Final map\n");

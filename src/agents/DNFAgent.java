@@ -146,7 +146,7 @@ public class DNFAgent extends BeginnerAgent{
     /**
      * Add a generated sentence to the KB.
      */
-    private void addToKB(String sentence) {
+    void addToKB(String sentence) {
         if (this.KB.equals("")) {
             this.KB = sentence;
         } else {

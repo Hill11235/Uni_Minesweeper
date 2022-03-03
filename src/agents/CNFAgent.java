@@ -1,5 +1,7 @@
 package agents;
 
+import org.logicng.io.parsers.ParserException;
+import support.Cell;
 import support.GameState;
 
 /**
@@ -44,5 +46,42 @@ public class CNFAgent extends DNFAgent {
     public void solve(boolean verbose) {
 
     }
+
+    private void generateKB() {
+
+    }
+
+    @Override
+    void SATSweep(boolean verbose) {
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                Cell currentCell = new Cell(i, j);
+
+                if (agentBoard[i][j] == '?') {
+                    if (verbose) {
+                        printAgentBoard();
+                    }
+                    entailmentChecks(currentCell);
+                }
+            }
+        }
+    }
+
+    private void entailmentChecks(Cell currentCell) {
+        if (!entailsNoDanger(currentCell)) {
+            probe(currentCell.getRow(), currentCell.getCol());
+        } else if (!entailsDanger(currentCell)) {
+            flag(currentCell.getRow(), currentCell.getCol());
+        }
+    }
+
+    private boolean entailsNoDanger(Cell coveredCell) {
+        return false;
+    }
+
+    private boolean entailsDanger(Cell coveredCell) {
+        return false;
+    }
+
 
 }
