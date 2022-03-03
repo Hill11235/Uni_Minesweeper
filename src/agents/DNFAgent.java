@@ -34,19 +34,24 @@ public class DNFAgent extends BeginnerAgent{
             printAgentBoard();
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
-            //System.out.println("Post SPS");
             generateCellLetterMap();
-            generateKB();
-            boolean DnfResult = sweepLoop(verbose);
+            for (int i = 0; i < agentBoard.length; i++) {
+                solve(verbose);
+            }
             System.out.println("Final map\n");
             printAgentBoard();
 
-            if (DnfResult) {
+            if (game.isWon()) {
                 System.out.println("\nResult: Agent alive: all solved\n");
             } else {
                 System.out.println("\nResult: Agent not terminated\n");
             }
         }
+    }
+
+    private void solve(boolean verbose) {
+        generateKB();
+        SATSweep(verbose);
     }
 
     //TODO check this approach doesn't cause issues on the larger configs where there might be more covered cells than letters.
@@ -64,6 +69,9 @@ public class DNFAgent extends BeginnerAgent{
     }
 
     private void generateKB() {
+        this.KB = "";
+        addedToKB.clear();
+
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
                 Cell currentCell = new Cell(i, j);
@@ -75,8 +83,8 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
-    @Override
-    boolean sweepLoop(boolean verbose) {
+
+    void SATSweep(boolean verbose) {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
                 Cell currentCell = new Cell(i, j);
@@ -93,8 +101,6 @@ public class DNFAgent extends BeginnerAgent{
                 }
             }
         }
-
-        return game.isWon();
     }
 
     private void entailmentChecks(Cell currentCell) throws ParserException {
