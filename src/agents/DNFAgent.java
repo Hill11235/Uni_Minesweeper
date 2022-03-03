@@ -17,10 +17,10 @@ import java.util.*;
  */
 public class DNFAgent extends BeginnerAgent{
 
-    private final ArrayList<Cell> addedToKB = new ArrayList<>();
-    private final HashMap<Cell, Character> cellLetterMap = new HashMap<>();
+    final ArrayList<Cell> addedToKB = new ArrayList<>();
+    final HashMap<Cell, Character> cellLetterMap = new HashMap<>();
     int charIncrementer = 65;
-    private String KB = "";
+    String KB = "";
 
     public DNFAgent(GameState game) {
         super(game);
@@ -28,7 +28,7 @@ public class DNFAgent extends BeginnerAgent{
 
     @Override
     public void sweep(boolean verbose) {
-        boolean SpsResult = super.sweepLoop(verbose);
+        boolean SpsResult = sps(verbose);
         if (SpsResult) {
             System.out.println("Final map\n");
             printAgentBoard();
@@ -49,13 +49,13 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
-    private void solve(boolean verbose) {
+    void solve(boolean verbose) {
         generateKB();
         SATSweep(verbose);
     }
 
     //TODO check this approach doesn't cause issues on the larger configs where there might be more covered cells than letters.
-    private void generateCellLetterMap() {
+    void generateCellLetterMap() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
                 Cell currentCell = new Cell(i, j);

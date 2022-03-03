@@ -14,9 +14,8 @@ public class BeginnerAgent extends BasicAgent {
         super(game);
     }
 
-    @Override
     public void sweep(boolean verbose) {
-        boolean result = sweepLoop(verbose);
+        boolean result = sps(verbose);
         System.out.println("Final map\n");
         printAgentBoard();
         if (result) {
@@ -26,7 +25,7 @@ public class BeginnerAgent extends BasicAgent {
         }
     }
 
-    boolean sweepLoop(boolean verbose) {
+    boolean sps(boolean verbose) {
         probeClues();
 
         for (int i = 0; i < agentBoard.length; i++) {
