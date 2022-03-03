@@ -1,5 +1,7 @@
 import agents.BasicAgent;
 import agents.BeginnerAgent;
+import agents.CNFAgent;
+import agents.DNFAgent;
 import support.GameState;
 import support.World;
 
@@ -35,10 +37,14 @@ public class A2main {
             beginner.sweep(verbose);
             break;
         case "P3":
-            //TODO: Part 3
+            GameState game3 = new GameState(world);
+            DNFAgent dnf = new DNFAgent(game3);
+            dnf.sweep(verbose);
             break;
         case "P4":
-            //TODO: Part 4
+            GameState game4 = new GameState(world);
+            CNFAgent cnf = new CNFAgent(game4);
+            cnf.sweep(verbose);
             break;
         case "P5":
             //TODO: Part 5

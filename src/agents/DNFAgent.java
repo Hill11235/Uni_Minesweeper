@@ -41,10 +41,10 @@ public class DNFAgent extends BeginnerAgent{
             System.out.println("Final map\n");
             printAgentBoard();
 
-            if (game.isWon()) {
-                System.out.println("\nResult: Agent alive: all solved\n");
-            } else {
+            if (!game.isWon()) {
                 System.out.println("\nResult: Agent not terminated\n");
+            } else if (game.isWon()) {
+                System.out.println("\nResult: Agent alive: all solved\n");
             }
         }
     }
