@@ -68,7 +68,7 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
-    private void generateKB() {
+    void generateKB() {
         this.KB = "";
         addedToKB.clear();
 
@@ -232,7 +232,7 @@ public class DNFAgent extends BeginnerAgent{
 
         char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
         int numAdjacentMines = Character.getNumericValue(cellValue);
-        ArrayList<Cell> adjacentCovered = super.getApplicableNeighbours(neighbour, '?');
+        ArrayList<Cell> adjacentCovered = getApplicableNeighbours(neighbour, '?');
         int numAdjacentCovered = adjacentCovered.size();
 
         List<Integer> initialSet = getIntegerList(numAdjacentCovered);
@@ -245,7 +245,7 @@ public class DNFAgent extends BeginnerAgent{
      * @param numAdjacentCovered size of list to be generated.
      * @return list of integers.
      */
-    private List<Integer> getIntegerList(int numAdjacentCovered) {
+    List<Integer> getIntegerList(int numAdjacentCovered) {
         List<Integer> initialSet = new ArrayList<>();
 
         for (int i = 0; i < numAdjacentCovered; i++) {

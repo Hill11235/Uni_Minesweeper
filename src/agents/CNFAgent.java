@@ -1,8 +1,11 @@
 package agents;
 
-import org.logicng.io.parsers.ParserException;
 import support.Cell;
 import support.GameState;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * P4 class for using a SAT solver to solve problem using KB in CNF.
@@ -44,11 +47,24 @@ public class CNFAgent extends DNFAgent {
 
     @Override
     public void solve(boolean verbose) {
-
+        generateKB();
     }
 
-    private void generateKB() {
+    @Override
+    public void createSentence(Cell currentCell) {
+        ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
 
+        for (Cell neighbour : adjacentCells) {
+            char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
+
+            if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
+                //get danger subsets
+                //generate at most N danger sentence using danger subsets
+                //get non-danger subsets
+                //generate at most N non-danger sentence using non-danger subsets
+                //combine these sentences using AND and add to KB
+            }
+        }
     }
 
     @Override
@@ -83,5 +99,21 @@ public class CNFAgent extends DNFAgent {
         return false;
     }
 
+    /**
+     * Used to generate non-danger combinations given a cell.
+     * @param neighbour
+     * @return
+     */
+    public List<Set<Integer>> getNonDangerSubsets(Cell neighbour) {
+        char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
+        int numAdjacentMines = Character.getNumericValue(cellValue);
+        ArrayList<Cell> adjacentCovered = getApplicableNeighbours(neighbour, '?');
+        int numAdjacentCovered = adjacentCovered.size();
+
+        List<Integer> initialSet = getIntegerList(numAdjacentCovered);
+        int numNonDangers = cellValue - numAdjacentMines;
+
+        return getKCombinations(initialSet, numNonDangers);
+    }
 
 }
