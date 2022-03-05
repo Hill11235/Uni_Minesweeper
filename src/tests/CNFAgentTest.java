@@ -11,7 +11,6 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//TODO implement additional scenario tests to check behaviour.
 public class CNFAgentTest {
 
     private GameState game3;
@@ -22,6 +21,8 @@ public class CNFAgentTest {
     private CNFAgent agent5;
     private GameState game6;
     private CNFAgent agent6;
+    private GameState game7;
+    private CNFAgent agent7;
 
     @BeforeEach
     public void setUp() {
@@ -40,6 +41,10 @@ public class CNFAgentTest {
         World world6 = World.TEST6;
         game6 = new GameState(world6);
         agent6 = new CNFAgent(game6);
+
+        World world7 = World.TEST7;
+        game7 = new GameState(world7);
+        agent7 = new CNFAgent(game7);
     }
 
     @Test
@@ -128,6 +133,30 @@ public class CNFAgentTest {
                 "    - - - \n" +
                 " 0| 0 b ? \n" +
                 " 1| b 2 ? \n" +
+                " 2| ? ? ? \n" +
+                "\n" +
+                "\n" +
+                "Result: Agent not terminated" +
+                "\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    @Test
+    void testSweepTEST7() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent7.sweep(false);
+        String expectedOutput = "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 \n" +
+                "    - - - \n" +
+                " 0| 0 b ? \n" +
+                " 1| b 4 ? \n" +
                 " 2| ? ? ? \n" +
                 "\n" +
                 "\n" +
