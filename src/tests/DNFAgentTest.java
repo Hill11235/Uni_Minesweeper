@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DNFAgentTest {
 
@@ -24,6 +24,8 @@ public class DNFAgentTest {
     private DNFAgent agent5;
     private GameState game6;
     private DNFAgent agent6;
+    private GameState game7;
+    private DNFAgent agent7;
 
     @BeforeEach
     public void setUp() {
@@ -42,6 +44,10 @@ public class DNFAgentTest {
         World world6 = World.TEST6;
         game6 = new GameState(world6);
         agent6 = new DNFAgent(game6);
+
+        World world7 = World.TEST7;
+        game7 = new GameState(world7);
+        agent7 = new DNFAgent(game7);
     }
 
     @Test
@@ -141,6 +147,30 @@ public class DNFAgentTest {
     }
 
     @Test
+    void testSweepTEST7() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent7.sweep(false);
+        String expectedOutput = "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 \n" +
+                "    - - - \n" +
+                " 0| 0 b ? \n" +
+                " 1| b 4 ? \n" +
+                " 2| ? ? ? \n" +
+                "\n" +
+                "\n" +
+                "Result: Agent not terminated" +
+                "\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    @Test
     public void testGetKCombinations() {
         ArrayList<Integer> masterSet = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
@@ -155,5 +185,17 @@ public class DNFAgentTest {
         String output4C2 = "[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]";
         List<Set<Integer>> listCombo = agent3.getKCombinations(masterSet, 2);
         assertEquals(output4C2, listCombo.toString());
+    }
+
+    /**
+     * Run all worlds and ensure there are no crashes.
+     */
+    @Test
+    void runAllWorlds() {
+        for (World world: World.values()) {
+            GameState game = new GameState(world);
+            DNFAgent agent = new DNFAgent(game);
+            agent.sweep(false);
+        }
     }
 }

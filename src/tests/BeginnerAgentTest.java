@@ -9,6 +9,7 @@ import support.World;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -132,9 +133,16 @@ public class BeginnerAgentTest {
      * Checks that the correct number of matched surrounding cells is returned correctly.
      */
     @Test
-    public void testGetApplicableNeighbours() {
+    public void testGetNumApplicableNeighbours() {
         Cell centreCell = new Cell(1, 1);
         int blockedCells = agent1.getNumApplicableNeighbours(centreCell, 'b');
         assertEquals(blockedCells, 4);
+    }
+
+    @Test
+    public void testGetApplicableNeighbours() {
+        Cell centreCell = new Cell(1, 1);
+        ArrayList<Cell> blockedCells = agent1.getApplicableNeighbours(centreCell, 'b');
+        assertEquals("[[0,1], [0,2], [1,0], [1,2]]", blockedCells.toString());
     }
 }

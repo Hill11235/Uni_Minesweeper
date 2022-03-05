@@ -9,7 +9,7 @@ import support.World;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CNFAgentTest {
 
@@ -165,5 +165,25 @@ public class CNFAgentTest {
                 "\n";
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
+    }
+
+    @Test
+    void runSmall6() {
+        World world = World.SMALL6;
+        GameState game = new GameState(world);
+        CNFAgent agent = new CNFAgent(game);
+        agent.sweep(true);
+    }
+
+    /**
+     * Run all worlds and ensure there are no crashes.
+     */
+    @Test
+    void runAllWorlds() {
+        for (World world: World.values()) {
+            GameState game = new GameState(world);
+            CNFAgent agent = new CNFAgent(game);
+            agent.sweep(false);
+        }
     }
 }

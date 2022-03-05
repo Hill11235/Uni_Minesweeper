@@ -57,7 +57,7 @@ public class CNFAgent extends DNFAgent {
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
             generateCellMap();
-            for (int i = 0; i < agentBoard.length; i++) {
+            for (int i = 0; i < getInitialCoveredCount(); i++) {
                 solve(verbose);
             }
             System.out.println("Final map\n");
@@ -69,6 +69,18 @@ public class CNFAgent extends DNFAgent {
                 System.out.println("\nResult: Agent alive: all solved\n");
             }
         }
+    }
+
+    private int getInitialCoveredCount() {
+        int coverCount = 0;
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                if (agentBoard[i][j] == '?') {
+                    coverCount++;
+                }
+            }
+        }
+        return coverCount;
     }
 
     @Override
@@ -139,7 +151,7 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
-    private void entailmentChecks(Cell currentCell, boolean verbose) throws ContradictionException, TimeoutException {
+    private void entailmentChecks(Cell currentCell, boolean verbose) throws TimeoutException {
         if (!entails(currentCell, true) && !entails(currentCell, false)) {
             return;
         } else if (!entails(currentCell, true)) {
