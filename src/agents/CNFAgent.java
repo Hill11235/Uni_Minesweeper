@@ -17,7 +17,7 @@ public class CNFAgent extends DNFAgent {
     }
 
     //  X run SPS
-    //    for each ?, get its numeric neighbour and generate CNF knowledge base
+    //  X for each ?, get its numeric neighbour and generate CNF knowledge base
     //    generate entailment KB
     //    convert entailment KB to DIMACS
     //    solve DIMACS output with SAT4J
@@ -48,23 +48,70 @@ public class CNFAgent extends DNFAgent {
     @Override
     public void solve(boolean verbose) {
         generateKB();
+        System.out.println(KB);
     }
 
     @Override
     public void createSentence(Cell currentCell) {
+        StringBuilder sentence = new StringBuilder("");
         ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
 
         for (Cell neighbour : adjacentCells) {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
-                //get danger subsets
-                //generate at most N danger sentence using danger subsets
-                //get non-danger subsets
-                //generate at most N non-danger sentence using non-danger subsets
-                //combine these sentences using AND and add to KB
+                List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
+                String dangerSentence = generateSentence(dangerSubsets, neighbour, true);
+                List<Set<Integer>> nonDangerSubsets = getNonDangerSubsets(neighbour);
+                String safeSentence = generateSentence(nonDangerSubsets, neighbour, false);
+                String combinedSentence = dangerSentence + " & " + safeSentence;
+                addToKB(combinedSentence);
             }
         }
+    }
+
+    public String generateSentence(List<Set<Integer>> dangerSubset, Cell neighbour, boolean danger) {
+        StringBuilder sentence = new StringBuilder("");
+        ArrayList<Cell> adjacentCovered = super.getApplicableNeighbours(neighbour, '?');
+
+        for (Set subset: dangerSubset) {
+            String option = generateOption(subset, adjacentCovered, danger);
+            if (sentence.length() > 0) {
+                sentence.append(" & ");
+            }
+            sentence.append(option);
+        }
+        //if (sentence.length() != 0) {
+        //    sentence.append(")");
+        //    sentence.insert(0, "(");
+        //}
+
+        return sentence.toString();
+    }
+
+    private String generateOption(Set<Integer> subset, ArrayList<Cell> adjacentCells, boolean danger) {
+        StringBuilder option = new StringBuilder("");
+        int count = 0;
+
+        for (Integer index : subset) {
+            Cell currentCell = adjacentCells.get(index);
+            String clause = cellLetterMap.get(currentCell).toString();
+            if (!danger) {
+                clause = "~" + clause;
+            }
+            if (count > 0) {
+                option.append(" | ");
+            }
+            option.append(clause);
+            count++;
+        }
+
+        if (option.length() > 0) {
+            option.append(")");
+            option.insert(0, "(");
+        }
+        System.out.println("Option: " + option.toString());
+        return option.toString();
     }
 
     @Override
@@ -92,10 +139,12 @@ public class CNFAgent extends DNFAgent {
     }
 
     private boolean entailsNoDanger(Cell coveredCell) {
+        String satInput = KB + " & " + cellLetterMap.get(coveredCell).toString();
         return false;
     }
 
     private boolean entailsDanger(Cell coveredCell) {
+        String satInput = KB + " & ~" + cellLetterMap.get(coveredCell).toString();
         return false;
     }
 
@@ -111,9 +160,30 @@ public class CNFAgent extends DNFAgent {
         int numAdjacentCovered = adjacentCovered.size();
 
         List<Integer> initialSet = getIntegerList(numAdjacentCovered);
-        int numNonDangers = cellValue - numAdjacentMines;
+        int numNonDangers = numAdjacentCovered - numAdjacentMines;
+
+        if (numNonDangers == 1) {
+            return getKCombinations(initialSet, initialSet.size());
+        }
 
         return getKCombinations(initialSet, numNonDangers);
+    }
+
+    @Override
+    public List<Set<Integer>> getDangerSubsets(Cell neighbour) {
+
+        char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
+        int numAdjacentMines = Character.getNumericValue(cellValue);
+        ArrayList<Cell> adjacentCovered = getApplicableNeighbours(neighbour, '?');
+        int numAdjacentCovered = adjacentCovered.size();
+
+        List<Integer> initialSet = getIntegerList(numAdjacentCovered);
+
+        if (numAdjacentMines == 1) {
+            return getKCombinations(initialSet, initialSet.size());
+        }
+
+        return getKCombinations(initialSet, numAdjacentMines);
     }
 
 }
