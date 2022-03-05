@@ -18,7 +18,7 @@ public class CNFAgent extends DNFAgent {
 
     //  X run SPS
     //  X for each ?, get its numeric neighbour and generate CNF knowledge base
-    //    generate entailment KB
+    //  X generate entailment KB
     //    convert entailment KB to DIMACS
     //    solve DIMACS output with SAT4J
 
@@ -80,6 +80,7 @@ public class CNFAgent extends DNFAgent {
                 sentence.append(" & ");
             }
             sentence.append(option);
+            System.out.println(option);
         }
         //if (sentence.length() != 0) {
         //    sentence.append(")");
@@ -110,7 +111,7 @@ public class CNFAgent extends DNFAgent {
             option.append(")");
             option.insert(0, "(");
         }
-        System.out.println("Option: " + option.toString());
+
         return option.toString();
     }
 
