@@ -3,14 +3,16 @@ package agents;
 import support.Cell;
 import support.GameState;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * P4 class for using a SAT solver to solve problem using KB in CNF.
  */
 public class CNFAgent extends DNFAgent {
+
+    HashMap<Cell, Integer> cellNumberMap = new HashMap<>();
+    Integer cellID = 1;
+    ArrayList<int[]> KB = new ArrayList<>();
 
     public CNFAgent(GameState game) {
         super(game);
@@ -22,6 +24,24 @@ public class CNFAgent extends DNFAgent {
     //    convert entailment KB to DIMACS
     //    solve DIMACS output with SAT4J
 
+    void generateCellMap() {
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                Cell currentCell = new Cell(i, j);
+
+                if (agentBoard[i][j] == '?') {
+                    cellNumberMap.put(currentCell, cellID);
+                    cellID++;
+                }
+            }
+        }
+    }
+
+    @Override
+    void clearKB() {
+        this.KB = new ArrayList<>();
+    }
+
     @Override
     public void sweep(boolean verbose) {
         boolean SpsResult = sps(verbose);
@@ -30,7 +50,7 @@ public class CNFAgent extends DNFAgent {
             printAgentBoard();
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
-            generateCellLetterMap();
+            generateCellMap();
             for (int i = 0; i < agentBoard.length; i++) {
                 solve(verbose);
             }
@@ -48,12 +68,10 @@ public class CNFAgent extends DNFAgent {
     @Override
     public void solve(boolean verbose) {
         generateKB();
-        System.out.println(KB);
     }
 
     @Override
     public void createSentence(Cell currentCell) {
-        StringBuilder sentence = new StringBuilder("");
         ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
 
         for (Cell neighbour : adjacentCells) {
@@ -61,58 +79,35 @@ public class CNFAgent extends DNFAgent {
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
-                String dangerSentence = generateSentence(dangerSubsets, neighbour, true);
+                generateSentence(dangerSubsets, neighbour, true);
                 List<Set<Integer>> nonDangerSubsets = getNonDangerSubsets(neighbour);
-                String safeSentence = generateSentence(nonDangerSubsets, neighbour, false);
-                String combinedSentence = dangerSentence + " & " + safeSentence;
-                addToKB(combinedSentence);
+                generateSentence(nonDangerSubsets, neighbour, false);
             }
         }
     }
 
-    public String generateSentence(List<Set<Integer>> dangerSubset, Cell neighbour, boolean danger) {
-        StringBuilder sentence = new StringBuilder("");
+    public void generateSentence(List<Set<Integer>> dangerSubset, Cell neighbour, boolean danger) {
         ArrayList<Cell> adjacentCovered = super.getApplicableNeighbours(neighbour, '?');
 
         for (Set subset: dangerSubset) {
-            String option = generateOption(subset, adjacentCovered, danger);
-            if (sentence.length() > 0) {
-                sentence.append(" & ");
-            }
-            sentence.append(option);
-            System.out.println(option);
+            int[] option = generateOption(subset, adjacentCovered, danger);
+            KB.add(option);
         }
-        //if (sentence.length() != 0) {
-        //    sentence.append(")");
-        //    sentence.insert(0, "(");
-        //}
-
-        return sentence.toString();
     }
 
-    private String generateOption(Set<Integer> subset, ArrayList<Cell> adjacentCells, boolean danger) {
-        StringBuilder option = new StringBuilder("");
-        int count = 0;
+    private int[] generateOption(Set<Integer> subset, ArrayList<Cell> adjacentCells, boolean danger) {
+        ArrayList<Integer> arrayBuilder = new ArrayList<>();
 
         for (Integer index : subset) {
             Cell currentCell = adjacentCells.get(index);
-            String clause = cellLetterMap.get(currentCell).toString();
+            int cellNum = cellNumberMap.get(currentCell);
             if (!danger) {
-                clause = "~" + clause;
+                cellNum = -cellNum;
             }
-            if (count > 0) {
-                option.append(" | ");
-            }
-            option.append(clause);
-            count++;
+            arrayBuilder.add(cellNum);
         }
 
-        if (option.length() > 0) {
-            option.append(")");
-            option.insert(0, "(");
-        }
-
-        return option.toString();
+        return arrayBuilder.stream().mapToInt(Integer::intValue).toArray();
     }
 
     @Override
@@ -140,12 +135,12 @@ public class CNFAgent extends DNFAgent {
     }
 
     private boolean entailsNoDanger(Cell coveredCell) {
-        String satInput = KB + " & " + cellLetterMap.get(coveredCell).toString();
+        //String satInput = KB + " & " + cellLetterMap.get(coveredCell).toString();
         return false;
     }
 
     private boolean entailsDanger(Cell coveredCell) {
-        String satInput = KB + " & ~" + cellLetterMap.get(coveredCell).toString();
+        //String satInput = KB + " & ~" + cellLetterMap.get(coveredCell).toString();
         return false;
     }
 

@@ -34,7 +34,7 @@ public class DNFAgent extends BeginnerAgent{
             printAgentBoard();
             System.out.println("\nResult: Agent alive: all solved\n");
         } else {
-            generateCellLetterMap();
+            generateCellMap();
             for (int i = 0; i < agentBoard.length; i++) {
                 solve(verbose);
             }
@@ -55,7 +55,7 @@ public class DNFAgent extends BeginnerAgent{
     }
 
     //TODO check this approach doesn't cause issues on the larger configs where there might be more covered cells than letters.
-    void generateCellLetterMap() {
+    void generateCellMap() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
                 Cell currentCell = new Cell(i, j);
@@ -69,7 +69,7 @@ public class DNFAgent extends BeginnerAgent{
     }
 
     void generateKB() {
-        this.KB = "";
+        clearKB();
         addedToKB.clear();
 
         for (int i = 0; i < agentBoard.length; i++) {
@@ -81,6 +81,10 @@ public class DNFAgent extends BeginnerAgent{
                 }
             }
         }
+    }
+
+    void clearKB() {
+        this.KB = "";
     }
 
 
