@@ -139,4 +139,9 @@ public class CNFAgentTest {
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
     }
+
+    @Test
+    public void testVerbose() {
+        agent4.sweep(true);
+    }
 }

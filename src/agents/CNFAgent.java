@@ -1,5 +1,11 @@
 package agents;
 
+import org.sat4j.core.VecInt;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.specs.ContradictionException;
+import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
+import org.sat4j.specs.TimeoutException;
 import support.Cell;
 import support.GameState;
 
@@ -21,7 +27,7 @@ public class CNFAgent extends DNFAgent {
     //  X run SPS
     //  X for each ?, get its numeric neighbour and generate CNF knowledge base
     //  X generate entailment KB
-    //    convert entailment KB to DIMACS
+    //  X convert entailment KB to DIMACS
     //    solve DIMACS output with SAT4J
 
     void generateCellMap() {
@@ -68,6 +74,7 @@ public class CNFAgent extends DNFAgent {
     @Override
     public void solve(boolean verbose) {
         generateKB();
+        SATSweep(verbose);
     }
 
     @Override
@@ -120,28 +127,34 @@ public class CNFAgent extends DNFAgent {
                     if (verbose) {
                         printAgentBoard();
                     }
-                    entailmentChecks(currentCell);
+                    try {
+                        entailmentChecks(currentCell);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
     }
 
-    private void entailmentChecks(Cell currentCell) {
-        if (!entailsNoDanger(currentCell)) {
+    private void entailmentChecks(Cell currentCell) throws ContradictionException, TimeoutException {
+        if (!entails(currentCell, false)) {
             probe(currentCell.getRow(), currentCell.getCol());
-        } else if (!entailsDanger(currentCell)) {
+        } else if (!entails(currentCell, true)) {
             flag(currentCell.getRow(), currentCell.getCol());
         }
     }
 
-    private boolean entailsNoDanger(Cell coveredCell) {
-        //String satInput = KB + " & " + cellLetterMap.get(coveredCell).toString();
-        return false;
-    }
+    private boolean entails(Cell coveredCell, boolean danger) throws ContradictionException, TimeoutException {
+        int cellNum = cellNumberMap.get(coveredCell);
+        if (danger) {
+            cellNum = -cellNum;
+        }
+        int[] singleArray = new int[]{cellNum};
+        ArrayList<int[]> satInput = new ArrayList<>(KB);
+        satInput.add(singleArray);
 
-    private boolean entailsDanger(Cell coveredCell) {
-        //String satInput = KB + " & ~" + cellLetterMap.get(coveredCell).toString();
-        return false;
+        return sat4jSolver(satInput, cellNumberMap);
     }
 
     /**
@@ -180,6 +193,27 @@ public class CNFAgent extends DNFAgent {
         }
 
         return getKCombinations(initialSet, numAdjacentMines);
+    }
+
+    private boolean sat4jSolver(ArrayList<int[]> clauses, HashMap<Cell, Integer> mapping) throws ContradictionException, TimeoutException {
+
+        int numVariables = mapping.size();
+        int numClauses = clauses.size();
+        ISolver solver = SolverFactory.newDefault();
+
+        solver.newVar(numVariables);
+        solver.setExpectedNumberOfClauses(numClauses);
+
+        for (int[] clause : clauses) {
+            solver.addClause(new VecInt(clause));
+        }
+
+        IProblem problem = solver;
+        if (problem.isSatisfiable()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
