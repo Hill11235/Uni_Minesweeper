@@ -3,14 +3,11 @@ package tests;
 import agents.CNFAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import support.Cell;
 import support.GameState;
 import support.World;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -142,6 +139,6 @@ public class CNFAgentTest {
 
     @Test
     public void testVerbose() {
-        agent4.sweep(true);
+        agent6.sweep(true);
     }
 }

@@ -26,7 +26,7 @@ public class BeginnerAgent extends BasicAgent {
         }
     }
 
-    boolean sps(boolean verbose) {
+    public boolean sps(boolean verbose) {
         probeClues();
 
         for (int i = 0; i < agentBoard.length; i++) {

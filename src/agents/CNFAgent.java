@@ -98,7 +98,9 @@ public class CNFAgent extends DNFAgent {
 
         for (Set subset: dangerSubset) {
             int[] option = generateOption(subset, adjacentCovered, danger);
-            KB.add(option);
+            if (option.length > 0) {
+                KB.add(option);
+            }
         }
     }
 
@@ -128,7 +130,7 @@ public class CNFAgent extends DNFAgent {
                         printAgentBoard();
                     }
                     try {
-                        entailmentChecks(currentCell);
+                        entailmentChecks(currentCell, verbose);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -137,15 +139,21 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
-    private void entailmentChecks(Cell currentCell) throws ContradictionException, TimeoutException {
-        if (!entails(currentCell, false)) {
-            probe(currentCell.getRow(), currentCell.getCol());
+    private void entailmentChecks(Cell currentCell, boolean verbose) throws ContradictionException, TimeoutException {
+        if (!entails(currentCell, true) && !entails(currentCell, false)) {
+            return;
         } else if (!entails(currentCell, true)) {
             flag(currentCell.getRow(), currentCell.getCol());
+            sps(verbose);
+            generateKB();
+        } else if (!entails(currentCell, false)) {
+            probe(currentCell.getRow(), currentCell.getCol());
+            sps(verbose);
+            generateKB();
         }
     }
 
-    private boolean entails(Cell coveredCell, boolean danger) throws ContradictionException, TimeoutException {
+    private boolean entails(Cell coveredCell, boolean danger) throws TimeoutException {
         int cellNum = cellNumberMap.get(coveredCell);
         if (danger) {
             cellNum = -cellNum;
@@ -195,7 +203,7 @@ public class CNFAgent extends DNFAgent {
         return getKCombinations(initialSet, numAdjacentMines);
     }
 
-    private boolean sat4jSolver(ArrayList<int[]> clauses, HashMap<Cell, Integer> mapping) throws ContradictionException, TimeoutException {
+    private boolean sat4jSolver(ArrayList<int[]> clauses, HashMap<Cell, Integer> mapping) throws TimeoutException {
 
         int numVariables = mapping.size();
         int numClauses = clauses.size();
@@ -205,7 +213,11 @@ public class CNFAgent extends DNFAgent {
         solver.setExpectedNumberOfClauses(numClauses);
 
         for (int[] clause : clauses) {
-            solver.addClause(new VecInt(clause));
+            try {
+                solver.addClause(new VecInt(clause));
+            } catch (ContradictionException con) {
+                return false;
+            }
         }
 
         IProblem problem = solver;
@@ -215,5 +227,4 @@ public class CNFAgent extends DNFAgent {
             return false;
         }
     }
-
 }
