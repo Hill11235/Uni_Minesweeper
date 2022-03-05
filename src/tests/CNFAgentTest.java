@@ -11,6 +11,7 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO implement additional scenario tests to check behaviour.
 public class CNFAgentTest {
 
     private GameState game3;
@@ -135,10 +136,5 @@ public class CNFAgentTest {
                 "\n";
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
-    }
-
-    @Test
-    public void testVerbose() {
-        agent6.sweep(true);
     }
 }
