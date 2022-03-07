@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DNFAgentTest {
 
@@ -188,17 +189,8 @@ public class DNFAgentTest {
     }
 
     /**
-     * Run all worlds and ensure there are no crashes.
+     * Test game SMALL6 as this was used for debugging purposes.
      */
-    @Test
-    void runAllWorlds() {
-        for (World world: World.values()) {
-            GameState game = new GameState(world);
-            DNFAgent agent = new DNFAgent(game);
-            agent.sweep(false);
-        }
-    }
-
     @Test
     void testSMALL6() {
         World world = World.SMALL6;
@@ -228,6 +220,9 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Test game SMALL7 as this was used for debugging purposes.
+     */
     @Test
     void testSMALL7() {
         World world = World.SMALL7;
@@ -257,14 +252,24 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
-    //TODO add test which checks for any mine spots when all games are run.
-
+    /**
+     * Run all available worlds and ensure that no mines are probed.
+     */
     @Test
-    void runSMALL8() {
-        //working on small4
-        World world = World.MEDIUM1;
-        GameState game = new GameState(world);
-        DNFAgent agent = new DNFAgent(game);
-        agent.sweep(false);
+    void checkNoMinesProbed() {
+        PrintStream originalOut = System.out;
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        for (World world: World.values()) {
+            GameState game = new GameState(world);
+            DNFAgent agent = new DNFAgent(game);
+            agent.sweep(false);
+        }
+
+        String allOutputs = outContent.toString();
+        String cleanedOutputs = allOutputs.replaceAll("    (- )+", " ");
+        assertFalse(cleanedOutputs.contains("-"));
+        System.setOut(originalOut);
     }
 }

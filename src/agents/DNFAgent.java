@@ -104,8 +104,7 @@ public class DNFAgent extends BeginnerAgent{
                         entailmentChecks(currentCell);
                         sps(verbose);
                         generateKB();
-                    } catch (ParserException e) {
-                        e.printStackTrace();
+                    } catch (ParserException ignored) {
                     }
                 }
             }
