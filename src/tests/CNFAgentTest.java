@@ -168,8 +168,37 @@ public class CNFAgentTest {
     }
 
     @Test
-    void runSmall6() {
+    void testSMALL6() {
         World world = World.SMALL6;
+        GameState game = new GameState(world);
+        CNFAgent agent = new CNFAgent(game);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent.sweep(false);
+        String expectedOutput = "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 3 4 \n" +
+                "    - - - - - \n" +
+                " 0| 0 0 0 0 b \n" +
+                " 1| 1 1 0 0 0 \n" +
+                " 2| * 2 1 b 0 \n" +
+                " 3| 4 * 2 0 b \n" +
+                " 4| * * 2 0 0 \n" +
+                "\n" +
+                "\n" +
+                "Result: Agent alive: all solved" +
+                "\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    @Test
+    void runSMALL7() {
+        World world = World.SMALL7;
         GameState game = new GameState(world);
         CNFAgent agent = new CNFAgent(game);
         agent.sweep(true);
@@ -183,6 +212,7 @@ public class CNFAgentTest {
         for (World world: World.values()) {
             GameState game = new GameState(world);
             CNFAgent agent = new CNFAgent(game);
+            System.out.println(world.name());
             agent.sweep(false);
         }
     }

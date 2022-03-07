@@ -24,12 +24,6 @@ public class CNFAgent extends DNFAgent {
         super(game);
     }
 
-    //  X run SPS
-    //  X for each ?, get its numeric neighbour and generate CNF knowledge base
-    //  X generate entailment KB
-    //  X convert entailment KB to DIMACS
-    //    solve DIMACS output with SAT4J
-
     void generateCellMap() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -92,14 +86,18 @@ public class CNFAgent extends DNFAgent {
     @Override
     public void createSentence(Cell currentCell) {
         ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
-
+        //System.out.println("? Cell: " + currentCell.toString());
         for (Cell neighbour : adjacentCells) {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
+            //System.out.println("Neighbour: " + neighbour.toString());
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
+                //System.out.println("Neighbour past if: " + neighbour.toString());
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
+                //System.out.println("Danger subsets size: " + dangerSubsets.size());
                 generateSentence(dangerSubsets, neighbour, true);
                 List<Set<Integer>> nonDangerSubsets = getNonDangerSubsets(neighbour);
+                //System.out.println("Non-danger subsets size: " + nonDangerSubsets.size());
                 generateSentence(nonDangerSubsets, neighbour, false);
             }
         }
@@ -121,6 +119,7 @@ public class CNFAgent extends DNFAgent {
 
         for (Integer index : subset) {
             Cell currentCell = adjacentCells.get(index);
+            //System.out.println("Cell used to generate option: " + currentCell.toString());
             int cellNum = cellNumberMap.get(currentCell);
             if (!danger) {
                 cellNum = -cellNum;
@@ -166,6 +165,7 @@ public class CNFAgent extends DNFAgent {
     }
 
     private boolean entails(Cell coveredCell, boolean danger) throws TimeoutException {
+        //System.out.println("Cell check: " + coveredCell.toString());
         int cellNum = cellNumberMap.get(coveredCell);
         if (danger) {
             cellNum = -cellNum;
@@ -193,6 +193,12 @@ public class CNFAgent extends DNFAgent {
 
         if (numNonDangers == 1) {
             return getKCombinations(initialSet, initialSet.size());
+        } else if (numAdjacentCovered < numAdjacentMines) {
+            Set<Integer> set = new HashSet<>();
+            set.add(0);
+            List<Set<Integer>> defaultList = new ArrayList<>();
+            defaultList.add(set);
+            return defaultList;
         }
 
         return getKCombinations(initialSet, numNonDangers);
@@ -205,6 +211,7 @@ public class CNFAgent extends DNFAgent {
         int numAdjacentMines = Character.getNumericValue(cellValue);
         ArrayList<Cell> adjacentCovered = getApplicableNeighbours(neighbour, '?');
         int numAdjacentCovered = adjacentCovered.size();
+        //System.out.println("Number adjacent covered cell: " + numAdjacentCovered);
 
         List<Integer> initialSet = getIntegerList(numAdjacentCovered);
 
@@ -223,6 +230,9 @@ public class CNFAgent extends DNFAgent {
 
         solver.newVar(numVariables);
         solver.setExpectedNumberOfClauses(numClauses);
+        //System.out.println("Number of variables: " + numVariables);
+        //System.out.println("Number of clauses: " + numClauses);
+        //printSatInput(clauses);
 
         for (int[] clause : clauses) {
             try {
@@ -238,5 +248,12 @@ public class CNFAgent extends DNFAgent {
         } else {
             return false;
         }
+    }
+
+    private void printSatInput(ArrayList<int[]> clauses) {
+        for (int[] arr : clauses) {
+            System.out.println(Arrays.toString(arr));
+        }
+
     }
 }

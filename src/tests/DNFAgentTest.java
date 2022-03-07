@@ -198,4 +198,73 @@ public class DNFAgentTest {
             agent.sweep(false);
         }
     }
+
+    @Test
+    void testSMALL6() {
+        World world = World.SMALL6;
+        GameState game = new GameState(world);
+        DNFAgent agent = new DNFAgent(game);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent.sweep(false);
+        String expectedOutput = "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 3 4 \n" +
+                "    - - - - - \n" +
+                " 0| 0 0 0 0 b \n" +
+                " 1| 1 1 0 0 0 \n" +
+                " 2| * 2 1 b 0 \n" +
+                " 3| 4 * 2 0 b \n" +
+                " 4| * * 2 0 0 \n" +
+                "\n" +
+                "\n" +
+                "Result: Agent alive: all solved" +
+                "\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    @Test
+    void testSMALL7() {
+        World world = World.SMALL7;
+        GameState game = new GameState(world);
+        DNFAgent agent = new DNFAgent(game);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        agent.sweep(false);
+        String expectedOutput = "Final map\n" +
+                "\n" +
+                "\n" +
+                "    0 1 2 3 4 \n" +
+                "    - - - - - \n" +
+                " 0| 1 * 2 * b \n" +
+                " 1| 1 b 2 2 2 \n" +
+                " 2| 0 b 0 1 * \n" +
+                " 3| 1 1 0 b 1 \n" +
+                " 4| * 1 0 0 0 \n"+
+                "\n" +
+                "\n" +
+                "Result: Agent alive: all solved" +
+                "\n" +
+                "\n";
+        assertEquals(outContent.toString(), expectedOutput);
+        System.setOut(originalOut);
+    }
+
+    //TODO add test which checks for any mine spots when all games are run.
+
+    @Test
+    void runSMALL8() {
+        //working on small4
+        World world = World.MEDIUM1;
+        GameState game = new GameState(world);
+        DNFAgent agent = new DNFAgent(game);
+        agent.sweep(false);
+    }
 }
