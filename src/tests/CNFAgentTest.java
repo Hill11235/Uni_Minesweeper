@@ -292,6 +292,7 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    //TODO remove when done
     @Test
     void runSMALL7() {
         World world = World.LARGE10;
@@ -345,6 +346,7 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    //TODO remove when done
     @Test
     void testMulti() {
         PrintStream originalOut = System.out;
