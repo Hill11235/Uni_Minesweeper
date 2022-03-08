@@ -295,7 +295,7 @@ public class CNFAgentTest {
     //TODO remove when done
     @Test
     void runSMALL7() {
-        World world = World.LARGE10;
+        World world = World.SMALL3;
         GameState game = new GameState(world);
         CNFAgent agent = new CNFAgent(game);
         agent.sweep(false);
