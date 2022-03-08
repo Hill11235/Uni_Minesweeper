@@ -111,6 +111,24 @@ public class BeginnerAgentTest {
         System.setOut(originalOut);
     }
 
+    @Test
+    void TestNoMinesProbed() {
+        PrintStream originalOut = System.out;
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        for (World world: World.values()) {
+            GameState game = new GameState(world);
+            BeginnerAgent agent = new BeginnerAgent(game);
+            agent.sweep(false);
+        }
+
+        String allOutputs = outContent.toString();
+        String cleanedOutputs = allOutputs.replaceAll("    (- )+", " ");
+        assertFalse(cleanedOutputs.contains("-"));
+        System.setOut(originalOut);
+    }
+
     /**
      * Check instance of AFN which should return false.
      */

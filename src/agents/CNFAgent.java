@@ -255,8 +255,8 @@ public class CNFAgent extends DNFAgent {
 
     private void printSatInput(ArrayList<int[]> clauses) {
         for (int[] arr : clauses) {
-            System.out.println(Arrays.toString(arr));
+            System.out.print(Arrays.toString(arr));
         }
-
+        System.out.println();
     }
 }
