@@ -15,6 +15,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * Tests for logic and methods in DNFAgent.
+ */
 public class DNFAgentTest {
 
     private GameState game3;
@@ -28,6 +31,9 @@ public class DNFAgentTest {
     private GameState game7;
     private DNFAgent agent7;
 
+    /**
+     * Set up agents and worlds before each test.
+     */
     @BeforeEach
     public void setUp() {
         World world3 = World.TEST3;
@@ -51,6 +57,9 @@ public class DNFAgentTest {
         agent7 = new DNFAgent(game7);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST3() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -75,6 +84,9 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST4() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -99,6 +111,9 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST5() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -123,6 +138,9 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST6() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -147,6 +165,9 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST7() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -171,6 +192,9 @@ public class DNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests that the correct combinations are returned.
+     */
     @Test
     public void testGetKCombinations() {
         ArrayList<Integer> masterSet = new ArrayList<>();
