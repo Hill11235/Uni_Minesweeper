@@ -5,14 +5,20 @@ import support.Cell;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Tests the methods and functionality of the Cell class.
+ */
 class CellTest {
 
     Cell testCell1 = new Cell(1, 1);
     Cell testCell2 = new Cell(5, 6);
     Cell testCell3 = new Cell(6, 6);
 
+    /**
+     * Tests that the correct adjacent cells are returned in three different scenarios.
+     */
     @Test
     public void testGetAdjacentCells() {
         ArrayList<Cell> adjacentCells1 = testCell1.getAdjacentCells(3);
@@ -28,6 +34,9 @@ class CellTest {
         assertEquals(adjacentCells3.toString(), adjacentString3);
     }
 
+    /**
+     * Test equivalent cells are equal.
+     */
     @Test
     void testEquals() {
         Cell a = new Cell(2, 2);
@@ -35,6 +44,9 @@ class CellTest {
         assertEquals(a, b);
     }
 
+    /**
+     * Tests that two Cells with the same internal state are hashed the same way.
+     */
     @Test
     void testHashCode() {
         Cell a = new Cell(2, 2);
@@ -42,18 +54,27 @@ class CellTest {
         assertEquals(a.hashCode(), b.hashCode());
     }
 
+    /**
+     * Tests that the row is returned correctly.
+     */
     @Test
     void testGetRow() {
         Cell a = new Cell(2, 3);
         assertEquals(a.getRow(), 2);
     }
 
+    /**
+     * Tests that the column is returned correctly.
+     */
     @Test
     void testGetCol() {
         Cell a = new Cell(2, 3);
         assertEquals(a.getCol(), 3);
     }
 
+    /**
+     * Tests that the correct String representation of a cell is returned.
+     */
     @Test
     void testToString() {
         Cell a = new Cell(2, 3);
