@@ -4,18 +4,29 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Included as an idea to implement a cell class. May not use.
+ * Cell class used to represent each individual cell in a board.
  */
 public class Cell {
 
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
+    /**
+     * Constructor, initialises the coordinates.
+     * @param row row position.
+     * @param col column position.
+     */
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
+    /**
+     * For a given cell in a board of width boardSize, get an ArrayList of the surrounding cells.
+     * Checks that the Cells returned would not be outside the boundaries of the world.
+     * @param boardSize width of the game world.
+     * @return list of surrounding cells.
+     */
     public ArrayList<Cell> getAdjacentCells(int boardSize) {
         ArrayList<Cell> cellList = new ArrayList<>();
         int rowLowerBound = Math.max(0, row - 1);
@@ -35,6 +46,11 @@ public class Cell {
         return cellList;
     }
 
+    /**
+     * Checks that two cells are equal by comparing their coordinates.
+     * @param o Cell object.
+     * @return true if same.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,19 +59,34 @@ public class Cell {
         return row == cell.row && col == cell.col;
     }
 
+    /**
+     * Hashes the cell based on its row and column position.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
     }
 
+    /**
+     * Get row position.
+     * @return row position of cell.
+     */
     public int getRow() {
         return this.row;
     }
 
+    /**
+     * Get column position.
+     * @return column position of cell.
+     */
     public int getCol() {
         return this.col;
     }
 
+    /**
+     * When Cell is needed as a String, present its coordinate position.
+     * @return coordinate position as String.
+     */
     public String toString() {
         return "[" + this.row + "," + this.col + "]";
     }
