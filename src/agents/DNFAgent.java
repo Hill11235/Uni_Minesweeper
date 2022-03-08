@@ -26,6 +26,9 @@ public class DNFAgent extends BeginnerAgent{
         super(game);
     }
 
+    /**
+     * Sweeps through board using solves using agent specific strategy.
+     */
     @Override
     public void sweep(boolean verbose) {
         boolean SpsResult = sps(verbose);
@@ -49,6 +52,10 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
+    /**
+     * Runs the SAT solver across all cells.
+     * @param verbose prints world with each iteration.
+     */
     void solve(boolean verbose) {
         //generateKB();
         sps(verbose);
@@ -56,6 +63,9 @@ public class DNFAgent extends BeginnerAgent{
         SATSweep(verbose);
     }
 
+    /**
+     * Maps each covered cell in the board to a char that can be used for SAT solver.
+     */
     //TODO check this approach doesn't cause issues on the larger configs where there might be more covered cells than letters.
     void generateCellMap() {
         for (int i = 0; i < agentBoard.length; i++) {
@@ -70,6 +80,9 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
+    /**
+     * Generate the logic from each covered cell for the knowledge base.
+     */
     void generateKB() {
         clearKB();
         addedToKB.clear();
@@ -85,11 +98,18 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
+    /**
+     * Resets the knowledge base.
+     */
     void clearKB() {
         this.KB = "";
     }
 
 
+    /**
+     * Loop through each position in the world and attempt to SAT solve it.
+     * @param verbose prints world with each iteration.
+     */
     void SATSweep(boolean verbose) {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -111,6 +131,11 @@ public class DNFAgent extends BeginnerAgent{
         }
     }
 
+    /**
+     * Checks for danger and non-danger entailment.
+     * @param currentCell Cell to be checked.
+     * @throws ParserException in event of parsing failure of SAT input.
+     */
     private void entailmentChecks(Cell currentCell) throws ParserException {
         generateKB();
         if (!entailsNoDanger(currentCell) && !entailsDanger(currentCell)) {
@@ -225,6 +250,12 @@ public class DNFAgent extends BeginnerAgent{
         return sentence.toString();
     }
 
+    /**
+     * Generates the logic based on the provided Cell combinations.
+     * @param subset Cell combinations.
+     * @param adjacentCells Cells around numeric cell.
+     * @return String of logic in DNF.
+     */
     private String generateOption(Set<Integer> subset, ArrayList<Cell> adjacentCells) {
         StringBuilder option = new StringBuilder("");
         int numAdjacentCovered = adjacentCells.size();
@@ -250,10 +281,10 @@ public class DNFAgent extends BeginnerAgent{
     }
 
     /**
-     * Provided with a central cell, takes its value and number of adjacent covered cells.
+     * Provided with a central Cell, takes its value and number of adjacent covered Cells.
      * Then calculated all the different danger subsets.
-     * @param neighbour
-     * @return
+     * @param neighbour numeric neighbour of a covered Cell.
+     * @return List of all possible danger combinations.
      */
     public List<Set<Integer>> getDangerSubsets(Cell neighbour) {
 
