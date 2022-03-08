@@ -81,6 +81,8 @@ public class CNFAgent extends DNFAgent {
     public void solve(boolean verbose) {
         generateKB();
         SATSweep(verbose);
+        sps(verbose);
+        generateKB();
     }
 
     @Override
@@ -142,8 +144,9 @@ public class CNFAgent extends DNFAgent {
                     }
                     try {
                         entailmentChecks(currentCell, verbose);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        sps(verbose);
+                        generateKB();
+                    } catch (Exception ignored) {
                     }
                 }
             }
@@ -209,8 +212,8 @@ public class CNFAgent extends DNFAgent {
 
         char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
         int numAdjacentMines = Character.getNumericValue(cellValue);
-        ArrayList<Cell> adjacentCovered = getApplicableNeighbours(neighbour, '?');
-        int numAdjacentCovered = adjacentCovered.size();
+        int numAdjacentCovered = getNumApplicableNeighbours(neighbour, '?');
+        int numAdjacentFlagged = getNumApplicableNeighbours(neighbour, '*');
         //System.out.println("Number adjacent covered cell: " + numAdjacentCovered);
 
         List<Integer> initialSet = getIntegerList(numAdjacentCovered);
@@ -219,7 +222,7 @@ public class CNFAgent extends DNFAgent {
             return getKCombinations(initialSet, initialSet.size());
         }
 
-        return getKCombinations(initialSet, numAdjacentMines);
+        return getKCombinations(initialSet, numAdjacentMines - numAdjacentFlagged);
     }
 
     private boolean sat4jSolver(ArrayList<int[]> clauses, HashMap<Cell, Integer> mapping) throws TimeoutException {
