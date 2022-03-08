@@ -6,7 +6,9 @@ import support.Cell;
 import support.GameState;
 import support.World;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test that the logic in GameState behaves as anticipated.
