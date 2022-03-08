@@ -16,6 +16,10 @@ public class BasicAgent {
     char[][] agentBoard;
     private int numMines;
 
+    /**
+     * Constructor, takes GameState arg.
+     * @param game linked game infrastructure.
+     */
     public BasicAgent(GameState game) {
         this.game = game;
         this.agentBoard = game.generateAgentBoard();
@@ -66,7 +70,6 @@ public class BasicAgent {
      * @param row row coordinate.
      * @param col column coordinate.
      */
-    //TODO refactor and simplify
     void probe(int row, int col) {
         Cell probedCell = new Cell(row, col);
 
@@ -109,7 +112,6 @@ public class BasicAgent {
     /**
      * Print board at end of the game.
      */
-    //TODO test
     public void printAgentBoard() {
         System.out.println();
         // first line
