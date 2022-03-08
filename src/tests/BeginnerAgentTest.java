@@ -11,10 +11,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 //TODO implement example from lectures which doesn't solve in one loop.
 
+/**
+ * Test logic and methods of the BeginnerAgent class.
+ */
 public class BeginnerAgentTest {
 
     private GameState game1;
@@ -24,6 +28,9 @@ public class BeginnerAgentTest {
     private GameState game3;
     private BeginnerAgent agent3;
 
+    /**
+     * Set up objects before each test.
+     */
     @BeforeEach
     public void setUp() {
         World world1 = World.TEST1;
@@ -39,6 +46,9 @@ public class BeginnerAgentTest {
         agent3 = new BeginnerAgent(game3);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST1() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -63,6 +73,9 @@ public class BeginnerAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST2() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -87,6 +100,9 @@ public class BeginnerAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests for the correct answer and stacscheck format.
+     */
     @Test
     void testSweepTEST3() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -111,6 +127,9 @@ public class BeginnerAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Tests that no mines are probed across all worlds.
+     */
     @Test
     void TestNoMinesProbed() {
         PrintStream originalOut = System.out;
@@ -157,6 +176,9 @@ public class BeginnerAgentTest {
         assertEquals(blockedCells, 4);
     }
 
+    /**
+     * Checks that the correct cells are returned.
+     */
     @Test
     public void testGetApplicableNeighbours() {
         Cell centreCell = new Cell(1, 1);
