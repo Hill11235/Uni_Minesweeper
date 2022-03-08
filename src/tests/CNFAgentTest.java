@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class CNFAgentTest {
 
@@ -205,15 +206,23 @@ public class CNFAgentTest {
     }
 
     /**
-     * Run all worlds and ensure there are no crashes.
+     * Run all available worlds and ensure that no mines are probed.
      */
     @Test
-    void runAllWorlds() {
+    void checkNoMinesProbed() {
+        PrintStream originalOut = System.out;
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
         for (World world: World.values()) {
             GameState game = new GameState(world);
             CNFAgent agent = new CNFAgent(game);
-            System.out.println(world.name());
             agent.sweep(false);
         }
+
+        String allOutputs = outContent.toString();
+        String cleanedOutputs = allOutputs.replaceAll("    (- )+", " ");
+        assertFalse(cleanedOutputs.contains("-"));
+        System.setOut(originalOut);
     }
 }
