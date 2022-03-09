@@ -13,6 +13,9 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+/**
+ * Tests P4 CNFAgent.
+ */
 public class CNFAgentTest {
 
     private GameState game3;
@@ -26,6 +29,9 @@ public class CNFAgentTest {
     private GameState game7;
     private CNFAgent agent7;
 
+    /**
+     * Set up agents and games.
+     */
     @BeforeEach
     public void setUp() {
         World world3 = World.TEST3;
@@ -49,6 +55,9 @@ public class CNFAgentTest {
         agent7 = new CNFAgent(game7);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST3() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -73,6 +82,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST4() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -97,6 +109,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST5() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -121,6 +136,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST6() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -144,7 +162,9 @@ public class CNFAgentTest {
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
     }
-
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST7() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -169,6 +189,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer. Used for debugging.
+     */
     @Test
     void testSMALL6() {
         World world = World.SMALL6;
@@ -198,6 +221,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer. Used for debugging.
+     */
     @Test
     void testSMALL7() {
         World world = World.SMALL7;
@@ -227,6 +253,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer. Used for debugging.
+     */
     @Test
     void testMEDIUM1() {
         World world = World.MEDIUM1;
@@ -258,6 +287,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer. Used for debugging.
+     */
     @Test
     void testLARGE1() {
         World world = World.LARGE1;
@@ -312,6 +344,9 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Checks that the DNF and CNF agent provide the same results. FAILS.
+     */
     @Test
     void testCnfAndDnfAgentGiveSameSolutions() {
         PrintStream originalOut = System.out;
