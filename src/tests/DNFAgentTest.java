@@ -300,7 +300,7 @@ public class DNFAgentTest {
     //TODO remove when done
     @Test
     void runSMALL7() {
-        World world = World.SMALL10;
+        World world = World.TEST8;
         GameState game = new GameState(world);
         DNFAgent agent = new DNFAgent(game);
         agent.sweep(false);

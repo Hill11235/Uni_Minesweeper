@@ -51,6 +51,8 @@ public class CSVWriter {
                 sb.append(",");
                 sb.append(agent.getGame().isLost());
                 sb.append(",");
+                sb.append(world.map[0].length * world.map[0].length);
+                sb.append(",");
                 sb.append(agent.getNumCoveredCells());
                 sb.append("\n");
 
@@ -88,6 +90,8 @@ public class CSVWriter {
         sb.append("Won");
         sb.append(",");
         sb.append("Lost");
+        sb.append(",");
+        sb.append("Total squares in game");
         sb.append(",");
         sb.append("Covered squares left");
         sb.append(",");
