@@ -9,7 +9,12 @@ import org.sat4j.specs.TimeoutException;
 import support.Cell;
 import support.GameState;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * P4 class for using a SAT solver to solve problem using KB in CNF.
@@ -20,10 +25,18 @@ public class CNFAgent extends DNFAgent {
     Integer cellID = 1;
     ArrayList<int[]> KB = new ArrayList<>();
 
+    /**
+     * Constructor for class.
+     * @param game linked game logic.
+     */
     public CNFAgent(GameState game) {
         super(game);
     }
 
+    /**
+     * Maps each cell in the game to an integer.
+     * Used to build DIMACS.
+     */
     void generateCellMap() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -37,11 +50,17 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
+    /**
+     * Clear the knowledge base between changes.
+     */
     @Override
     void clearKB() {
         this.KB = new ArrayList<>();
     }
 
+    /**
+     * Sweeps through board using solves using agent specific strategy.
+     */
     @Override
     public void sweep(boolean verbose) {
         boolean SpsResult = sps(verbose);
@@ -65,6 +84,10 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
+    /**
+     * Get the number of initial covered cells.
+     * @return number of covered cells.
+     */
     private int getInitialCoveredCount() {
         int coverCount = 0;
         for (int i = 0; i < agentBoard.length; i++) {
@@ -77,6 +100,10 @@ public class CNFAgent extends DNFAgent {
         return coverCount;
     }
 
+    /**
+     * One iteration of solving the game.
+     * @param verbose prints world with each iteration.
+     */
     @Override
     public void solve(boolean verbose) {
         generateKB();
@@ -85,26 +112,31 @@ public class CNFAgent extends DNFAgent {
         generateKB();
     }
 
+    /**
+     * For a covered cell, generate logic.
+     * @param currentCell covered cell to generate logic based on.
+     */
     @Override
     public void createSentence(Cell currentCell) {
         ArrayList<Cell> adjacentCells = currentCell.getAdjacentCells(agentBoard.length);
-        //System.out.println("? Cell: " + currentCell.toString());
         for (Cell neighbour : adjacentCells) {
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
-            //System.out.println("Neighbour: " + neighbour.toString());
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*') {
-                //System.out.println("Neighbour past if: " + neighbour.toString());
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
-                //System.out.println("Danger subsets size: " + dangerSubsets.size());
                 generateSentence(dangerSubsets, neighbour, true);
                 List<Set<Integer>> nonDangerSubsets = getNonDangerSubsets(neighbour);
-                //System.out.println("Non-danger subsets size: " + nonDangerSubsets.size());
                 generateSentence(nonDangerSubsets, neighbour, false);
             }
         }
     }
 
+    /**
+     * Given a cell, create all the logic options for danger in the surrounding cells.
+     * @param dangerSubset the number of options containing cells to be marked as dangerous.
+     * @param neighbour numeric cell at centre of danger subsets.
+     * @return logic sentence that's to be added to the KB.
+     */
     public void generateSentence(List<Set<Integer>> dangerSubset, Cell neighbour, boolean danger) {
         ArrayList<Cell> adjacentCovered = super.getApplicableNeighbours(neighbour, '?');
 
@@ -116,12 +148,17 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
+    /**
+     * Generates the logic based on the provided Cell combinations.
+     * @param subset Cell combinations.
+     * @param adjacentCells Cells around numeric cell.
+     * @return String of logic in DNF.
+     */
     private int[] generateOption(Set<Integer> subset, ArrayList<Cell> adjacentCells, boolean danger) {
         ArrayList<Integer> arrayBuilder = new ArrayList<>();
 
         for (Integer index : subset) {
             Cell currentCell = adjacentCells.get(index);
-            //System.out.println("Cell used to generate option: " + currentCell.toString());
             int cellNum = cellNumberMap.get(currentCell);
             if (!danger) {
                 cellNum = -cellNum;
@@ -132,6 +169,10 @@ public class CNFAgent extends DNFAgent {
         return arrayBuilder.stream().mapToInt(Integer::intValue).toArray();
     }
 
+    /**
+     * Loop through each position in the world and attempt to SAT solve it.
+     * @param verbose prints world with each iteration.
+     */
     @Override
     void SATSweep(boolean verbose) {
         for (int i = 0; i < agentBoard.length; i++) {
@@ -153,6 +194,11 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
+    /**
+     * Checks for danger and non-danger entailment.
+     * @param currentCell Cell to be checked.
+     * @throws TimeoutException in event of parsing failure of SAT input.
+     */
     private void entailmentChecks(Cell currentCell, boolean verbose) throws TimeoutException {
         if (!entails(currentCell, true) && !entails(currentCell, false)) {
             return;
@@ -167,8 +213,14 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
+    /**
+     * Run entailment checks for a given covered cell.
+     * @param coveredCell cell to be checked.
+     * @param danger toggle for danger/non-danger.
+     * @return true if satisfiable.
+     * @throws TimeoutException in event of parsing failure of SAT input.
+     */
     private boolean entails(Cell coveredCell, boolean danger) throws TimeoutException {
-        //System.out.println("Cell check: " + coveredCell.toString());
         int cellNum = cellNumberMap.get(coveredCell);
         if (danger) {
             cellNum = -cellNum;
@@ -181,9 +233,10 @@ public class CNFAgent extends DNFAgent {
     }
 
     /**
-     * Used to generate non-danger combinations given a cell.
-     * @param neighbour
-     * @return
+     * Provided with a central Cell, takes its value and number of adjacent covered Cells.
+     * Then calculated all the different non-danger subsets.
+     * @param neighbour numeric neighbour of a covered Cell.
+     * @return List of all possible danger combinations.
      */
     public List<Set<Integer>> getNonDangerSubsets(Cell neighbour) {
         char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
@@ -207,6 +260,12 @@ public class CNFAgent extends DNFAgent {
         return getKCombinations(initialSet, numNonDangers);
     }
 
+    /**
+     * Provided with a central Cell, takes its value and number of adjacent covered Cells.
+     * Then calculated all the different danger subsets.
+     * @param neighbour numeric neighbour of a covered Cell.
+     * @return List of all possible danger combinations.
+     */
     @Override
     public List<Set<Integer>> getDangerSubsets(Cell neighbour) {
 
@@ -214,7 +273,6 @@ public class CNFAgent extends DNFAgent {
         int numAdjacentMines = Character.getNumericValue(cellValue);
         int numAdjacentCovered = getNumApplicableNeighbours(neighbour, '?');
         int numAdjacentFlagged = getNumApplicableNeighbours(neighbour, '*');
-        //System.out.println("Number adjacent covered cell: " + numAdjacentCovered);
 
         List<Integer> initialSet = getIntegerList(numAdjacentCovered);
 
@@ -225,6 +283,13 @@ public class CNFAgent extends DNFAgent {
         return getKCombinations(initialSet, numAdjacentMines - numAdjacentFlagged);
     }
 
+    /**
+     * Sat solver method.
+     * @param clauses knowledge base and additional clause.
+     * @param mapping used to determine number of clauses.
+     * @return true if satisfiable.
+     * @throws TimeoutException in event of parsing failure of SAT input.
+     */
     private boolean sat4jSolver(ArrayList<int[]> clauses, HashMap<Cell, Integer> mapping) throws TimeoutException {
 
         int numVariables = mapping.size();
@@ -233,9 +298,6 @@ public class CNFAgent extends DNFAgent {
 
         solver.newVar(numVariables);
         solver.setExpectedNumberOfClauses(numClauses);
-        //System.out.println("Number of variables: " + numVariables);
-        //System.out.println("Number of clauses: " + numClauses);
-        //printSatInput(clauses);
 
         for (int[] clause : clauses) {
             try {
@@ -253,6 +315,10 @@ public class CNFAgent extends DNFAgent {
         }
     }
 
+    /**
+     * Debugging method for Sat input.
+     * @param clauses KB and additional clause.
+     */
     private void printSatInput(ArrayList<int[]> clauses) {
         for (int[] arr : clauses) {
             System.out.print(Arrays.toString(arr));
