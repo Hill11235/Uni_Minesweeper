@@ -10,7 +10,12 @@ import org.logicng.solvers.SATSolver;
 import support.Cell;
 import support.GameState;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * P3 class for using a SAT solver to solve problem using KB in DNF.
