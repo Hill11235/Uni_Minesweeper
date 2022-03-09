@@ -22,6 +22,10 @@ public class DNFAgent extends BeginnerAgent{
     int charIncrementer = 65;
     String KB = "";
 
+    /**
+     * Constructor for class.
+     * @param game linked game logic.
+     */
     public DNFAgent(GameState game) {
         super(game);
     }
@@ -57,7 +61,6 @@ public class DNFAgent extends BeginnerAgent{
      * @param verbose prints world with each iteration.
      */
     void solve(boolean verbose) {
-        //generateKB();
         sps(verbose);
         generateKB();
         SATSweep(verbose);
@@ -66,7 +69,6 @@ public class DNFAgent extends BeginnerAgent{
     /**
      * Maps each covered cell in the board to a char that can be used for SAT solver.
      */
-    //TODO check this approach doesn't cause issues on the larger configs where there might be more covered cells than letters.
     void generateCellMap() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -120,7 +122,6 @@ public class DNFAgent extends BeginnerAgent{
                         printAgentBoard();
                     }
                     try {
-                        //System.out.println("Cell in sweep: " + currentCell.toString());
                         entailmentChecks(currentCell);
                         sps(verbose);
                         generateKB();
@@ -141,11 +142,9 @@ public class DNFAgent extends BeginnerAgent{
         if (!entailsNoDanger(currentCell) && !entailsDanger(currentCell)) {
             return;
         } else if (!entailsNoDanger(currentCell)) {
-            //System.out.println("probing");
             probe(currentCell.getRow(), currentCell.getCol());
             generateKB();
         } else if (!entailsDanger(currentCell)) {
-            //System.out.println("flagging");
             flag(currentCell.getRow(), currentCell.getCol());
             generateKB();
         }
@@ -156,19 +155,14 @@ public class DNFAgent extends BeginnerAgent{
      * @return boolean indicating satisifiability.
      */
     private boolean entailsNoDanger(Cell coveredCell) throws ParserException {
-        //System.out.println("Entails no danger check");
         FormulaFactory f = new FormulaFactory();
         PropositionalParser p = new PropositionalParser(f);
         String satInput = "(" + KB + ") & " + cellLetterMap.get(coveredCell).toString();
-        //System.out.println("SatInput no danger: " + satInput);
         Formula formula = p.parse(satInput);
-        //System.out.println("entailsNoDangerFormula: " + formula.toString());
 
         SATSolver miniSat = MiniSat.miniSat(f);
         miniSat.add(formula);
         Tristate result = miniSat.sat();
-        //System.out.println("Entails no danger result: " + result.toString());
-        //System.out.println("Converts to: " + Objects.equals(result.toString(), "TRUE"));
         return Objects.equals(result.toString(), "TRUE");
     }
 
@@ -177,19 +171,14 @@ public class DNFAgent extends BeginnerAgent{
      * @return boolean indicating satisifiability.
      */
     private boolean entailsDanger(Cell coveredCell) throws ParserException {
-        //System.out.println("Entails danger check");
         FormulaFactory f = new FormulaFactory();
         PropositionalParser p = new PropositionalParser(f);
         String satInput = "(" + KB + ") & ~" + cellLetterMap.get(coveredCell).toString();
-        //System.out.println("SatInput danger: " + satInput);
         Formula formula = p.parse(satInput);
-        //System.out.println("entailsDangerFormula: " + formula.toString());
 
         SATSolver miniSat = MiniSat.miniSat(f);
         miniSat.add(formula);
         Tristate result = miniSat.sat();
-        //System.out.println("Entails danger result: " + result.toString());
-        //System.out.println("Converts to: " + Objects.equals(result.toString(), "TRUE"));
         return Objects.equals(result.toString(), "TRUE");
     }
 
@@ -215,10 +204,8 @@ public class DNFAgent extends BeginnerAgent{
             char cellValue = agentBoard[neighbour.getRow()][neighbour.getCol()];
 
             if (cellValue != 'b' && cellValue != '?' && cellValue != '*' && !addedToKB.contains(neighbour)) {
-                //System.out.println("Cell used to generate sentence: " + neighbour.toString());
                 List<Set<Integer>> dangerSubsets = getDangerSubsets(neighbour);
                 String sentence = generateSentence(dangerSubsets, neighbour);
-                //System.out.println("Sentence generated: " + sentence);
                 addToKB(sentence);
                 addedToKB.add(neighbour);
             }
@@ -292,9 +279,6 @@ public class DNFAgent extends BeginnerAgent{
         int numAdjacentMines = Character.getNumericValue(cellValue);
         int numAdjacentCovered = getNumApplicableNeighbours(neighbour, '?');
         int numAdjacentFlagged = getNumApplicableNeighbours(neighbour, '*');
-
-        //System.out.println("Number adjacent covered cell: " + numAdjacentCovered);
-        //System.out.println("Number adjacent mines: " + numAdjacentMines);
 
         List<Integer> initialSet = getIntegerList(numAdjacentCovered);
 
