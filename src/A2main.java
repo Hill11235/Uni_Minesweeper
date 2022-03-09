@@ -45,7 +45,6 @@ public class A2main {
             cnf.sweep(verbose);
             break;
         case "P5":
-            //TODO: Part 5
             break;
         }
 
