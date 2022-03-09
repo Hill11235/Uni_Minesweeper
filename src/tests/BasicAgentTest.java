@@ -10,8 +10,11 @@ import support.World;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test class for P1.
+ */
 class BasicAgentTest {
 
     private GameState game1;
@@ -21,6 +24,9 @@ class BasicAgentTest {
     private GameState game3;
     private BasicAgent agent3;
 
+    /**
+     * Set up agents and games.
+     */
     @BeforeEach
     public void setUp() {
         World world1 = World.TEST1;
@@ -36,6 +42,9 @@ class BasicAgentTest {
         agent3 = new BasicAgent(game3);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST1() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -60,6 +69,9 @@ class BasicAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST1Verbose() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -91,6 +103,9 @@ class BasicAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST2() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -114,6 +129,9 @@ class BasicAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST2Verbose() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -152,6 +170,9 @@ class BasicAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST3() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -176,6 +197,9 @@ class BasicAgentTest {
         System.setOut(originalOut);
     }
 
+    /**
+     * Check for stacsheck output and answer.
+     */
     @Test
     void testSweepTEST3Verbose() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
