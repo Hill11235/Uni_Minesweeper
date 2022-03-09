@@ -295,10 +295,10 @@ public class CNFAgentTest {
     //TODO remove when done
     @Test
     void runSMALL7() {
-        World world = World.TEST8;
+        World world = World.MEDIUM1;
         GameState game = new GameState(world);
         CNFAgent agent = new CNFAgent(game);
-        agent.sweep(true);
+        agent.sweep(false);
     }
 
     /**
@@ -352,7 +352,7 @@ public class CNFAgentTest {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        World world = World.TEST6;
+        World world = World.MEDIUM1;
 
             GameState game1 = new GameState(world);
             CNFAgent agentCNF = new CNFAgent(game1);

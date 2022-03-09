@@ -108,24 +108,6 @@ public class BeginnerAgent extends BasicAgent {
     }
 
     /**
-     * Get the number of adjacent cells of the requested type.
-     * @param centreCell check neighbours of this cell.
-     * @param match char to be checked for.
-     * @return number of matches
-     */
-    public int getNumApplicableNeighbours(Cell centreCell, char match) {
-        ArrayList<Cell> adjacentCells = centreCell.getAdjacentCells(agentBoard.length);
-        int numApplicableNeighbours = 0;
-
-        for (Cell neighbour: adjacentCells) {
-            if (agentBoard[neighbour.getRow()][neighbour.getCol()] == match) {
-                numApplicableNeighbours++;
-            }
-        }
-        return numApplicableNeighbours;
-    }
-
-    /**
      * Get the adjacent cells of the requested type.
      * @param centreCell check neighbours of this cell.
      * @param match char to be checked for.

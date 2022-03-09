@@ -167,16 +167,6 @@ public class BeginnerAgentTest {
     }
 
     /**
-     * Checks that the correct number of matched surrounding cells is returned correctly.
-     */
-    @Test
-    public void testGetNumApplicableNeighbours() {
-        Cell centreCell = new Cell(1, 1);
-        int blockedCells = agent1.getNumApplicableNeighbours(centreCell, 'b');
-        assertEquals(blockedCells, 4);
-    }
-
-    /**
      * Checks that the correct cells are returned.
      */
     @Test

@@ -98,6 +98,9 @@ public class BasicAgent {
      */
     public void flag(int row, int col) {}
 
+    /**
+     * Creates a list of all the blocked cells.
+     */
     private void initialiseBlockedList() {
         for (int i = 0; i < agentBoard.length; i++) {
             for (int j = 0; j < agentBoard.length; j++) {
@@ -135,5 +138,49 @@ public class BasicAgent {
             System.out.println();
         }
         System.out.println();
+    }
+
+    /**
+     * Get game logic class associated with agent.
+     * Used for checking final outcome for CSVWriter class.
+     * @return game logic class.
+     */
+    public GameState getGame() {
+        return game;
+    }
+
+    /**
+     * Get the number of adjacent cells of the requested type.
+     * @param centreCell check neighbours of this cell.
+     * @param match char to be checked for.
+     * @return number of matches
+     */
+    public int getNumApplicableNeighbours(Cell centreCell, char match) {
+        ArrayList<Cell> adjacentCells = centreCell.getAdjacentCells(agentBoard.length);
+        int numApplicableNeighbours = 0;
+
+        for (Cell neighbour: adjacentCells) {
+            if (agentBoard[neighbour.getRow()][neighbour.getCol()] == match) {
+                numApplicableNeighbours++;
+            }
+        }
+        return numApplicableNeighbours;
+    }
+
+    /**
+     * Used to determine the number of covered Cells at any point.
+     * @return number of covered Cells.
+     */
+    public int getNumCoveredCells() {
+        int numCoveredCells = 0;
+
+        for (int i = 0; i < agentBoard.length; i++) {
+            for (int j = 0; j < agentBoard.length; j++) {
+                if (agentBoard[i][j] == '?') {
+                    numCoveredCells++;
+                }
+            }
+        }
+        return numCoveredCells;
     }
 }

@@ -3,6 +3,7 @@ package tests;
 import agents.BasicAgent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import support.Cell;
 import support.GameState;
 import support.World;
 
@@ -218,5 +219,24 @@ class BasicAgentTest {
                 "\n";
         assertEquals(outContent.toString(), expectedOutput);
         System.setOut(originalOut);
+    }
+
+    /**
+     * Checks that the correct number of matched surrounding cells is returned correctly.
+     */
+    @Test
+    public void testGetNumApplicableNeighbours() {
+        Cell centreCell = new Cell(1, 1);
+        int blockedCells = agent1.getNumApplicableNeighbours(centreCell, 'b');
+        assertEquals(blockedCells, 4);
+    }
+
+    /**
+     * Tests the correct number of covered cells is returned after a sweep.
+     */
+    @Test
+    public void testGetNumCoveredCells() {
+        agent1.sweep(false);
+        assertEquals(agent1.getNumCoveredCells(), 3);
     }
 }
