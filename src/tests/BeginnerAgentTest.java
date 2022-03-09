@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-//TODO implement example from lectures which doesn't solve in one loop.
-
 /**
  * Test logic and methods of the BeginnerAgent class.
  */

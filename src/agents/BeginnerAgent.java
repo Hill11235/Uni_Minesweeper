@@ -51,8 +51,10 @@ public class BeginnerAgent extends BasicAgent {
                     }
                     if (allFreeNeighbours(currentCell)) {
                         probe(i, j);
+                        sps(verbose);
                     } else if (allMarkedNeighbours(currentCell)) {
                         flag(i, j);
+                        sps(verbose);
                     }
                 }
             }
