@@ -12,7 +12,6 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CNFAgentTest {
 
@@ -292,15 +291,6 @@ public class CNFAgentTest {
         System.setOut(originalOut);
     }
 
-    //TODO remove when done
-    @Test
-    void runSMALL7() {
-        World world = World.MEDIUM1;
-        GameState game = new GameState(world);
-        CNFAgent agent = new CNFAgent(game);
-        agent.sweep(false);
-    }
-
     /**
      * Run all available worlds and ensure that no mines are probed.
      */
@@ -344,30 +334,5 @@ public class CNFAgentTest {
         }
 
         System.setOut(originalOut);
-    }
-
-    //TODO remove when done
-    @Test
-    void testMulti() {
-        PrintStream originalOut = System.out;
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        World world = World.MEDIUM1;
-
-            GameState game1 = new GameState(world);
-            CNFAgent agentCNF = new CNFAgent(game1);
-            agentCNF.sweep(false);
-            String allOutputsCNF = outContent.toString();
-            outContent.reset();
-
-            GameState game2 = new GameState(world);
-            DNFAgent agentDNF = new DNFAgent(game2);
-            agentDNF.sweep(false);
-            String allOutputsDNF = outContent.toString();
-
-        System.setOut(originalOut);
-
-        System.out.println("AllOutputsCNF: " + allOutputsCNF);
-        System.out.println("AllOutputsDNF: " + allOutputsDNF);
     }
 }

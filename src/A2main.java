@@ -17,13 +17,11 @@ public class A2main {
         System.out.println("-------------------------------------------\n");
         System.out.println("Agent " + args[0] + " plays " + args[1] + "\n");
 
-
         World world = World.valueOf(args[1]);
 
         char[][] board = world.map;
         printBoard(board);
         System.out.println("Start!");
-
 
         switch (args[0]) {
         case "P1":
@@ -55,7 +53,6 @@ public class A2main {
         //System.out.println("\nResult: Agent alive: all solved\n");
         //System.out.println("\nResult: Agent dead: found mine\n");
         //System.out.println("\nResult: Agent not terminated\n");
-
     }
 
     //prints the board in the required format - PLEASE DO NOT MODIFY
@@ -83,7 +80,4 @@ public class A2main {
         }
         System.out.println();
     }
-
-
-
 }
