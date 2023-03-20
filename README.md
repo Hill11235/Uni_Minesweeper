@@ -1,5 +1,7 @@
 # Uni_Minesweeper
 
+Pretty broken
+
 ### Compilation instructions
 To compile run the following commands in the src directory:
 
